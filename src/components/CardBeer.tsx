@@ -20,18 +20,18 @@ interface BeerProps {
 export default function CardBeer({ id, name, description, imageUrl }: BeerProps) {
     const [checkIsLogin, setCheckIsLogin] = useState(null);
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        try {
-            setCheckIsLogin(gapi.auth.getToken().access_token)
-            var auth2 = gapi.auth2.getAuthInstance();
-            var profile = auth2.currentUser.get().getBasicProfile();
-            console.log(profile)
+    //     try {
+    //         setCheckIsLogin(gapi.auth.getToken().access_token)
+    //         var auth2 = gapi.auth2.getAuthInstance();
+    //         var profile = auth2.currentUser.get().getBasicProfile();
+    //         console.log(profile)
 
-        } catch (error) {
-            console.log(error)
-        }
-    }, [])
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }, [])
 
     const MAX_LENGTH_DESCRIPTION = 30
 

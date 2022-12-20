@@ -25,8 +25,6 @@ export default function BeerCreateScreen() {
     const [ingredients, setIngredients] = useState<Ingredient[]>([])
     const [methods, setMethods] = useState<string[]>([])
 
-    console.log(fileImage)
-
     const handlerFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) return;
         const objectImage = URL.createObjectURL(e.target.files[0])
@@ -78,7 +76,6 @@ export default function BeerCreateScreen() {
         formData.append('key', API_KEY)
         formData.append('media', fileImage)
         try {
-            console.log("test")
             axios.post("https://thumbsnap.com/api/upload", formData, {
                 headers
             }).then(result => {

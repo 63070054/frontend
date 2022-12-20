@@ -1,4 +1,3 @@
-import NavBar from "../components/NavBar";
 import Container from '@mui/material/Container';
 import Grid from "@mui/material/Grid"
 import SelectFilterIngredients from "../components/SelectFilterIngredients";
@@ -88,7 +87,6 @@ export default function HomeScreen() {
 
     return (
         <>
-            <NavBar />
             <Container maxWidth="sm" className="p-16">
                 <Grid container spacing={2}>
                     <Grid item xs={12}>

@@ -18,10 +18,14 @@ import axios from 'axios';
 import { GoogleLogin } from 'react-google-login';
 import { GoogleLogout } from 'react-google-login';
 
+interface NavBarProps {
+    login: () => void;
+    logout: () => void;
+    isLogin: boolean;
+}
 
-export default function NavBar() {
+export default function NavBar({ login, logout, isLogin }: NavBarProps) {
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-    const [isLogin, setIsLogin] = useState<boolean>(false);
     const clientID = "971797688819-5osp62f7rkgko6ul3uvdja8k8q9jg80p.apps.googleusercontent.com"
     const handleProfileMenuOpen = () => {
         setIsMenuOpen(true)
@@ -31,34 +35,33 @@ export default function NavBar() {
         setIsMenuOpen(false);
     };
 
-    const responseGoogle = (response: any) => {
-        console.log(response)
-        setIsLogin(true)
+    const handleGoogleLoginSuccess = (response: any) => {
+        login();
 
-        try {
-            axios.post('http://localhost:8080/user', {
-                favorite: [],
-                owner: [],
-                fname: response.profileObj.givenName,
-                lname: response.profileObj.familyName,
-                imageurl: response.profileObj.imageUrl,
-                email: response.profileObj.email
-            })
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        } catch (error) {
-            console.log(error)
-        }
+        // try {
+        //     axios.post('http://localhost:8080/user', {
+        //         favorite: [],
+        //         owner: [],
+        //         firsrtName: response.profileObj.givenName,
+        //         lastName: response.profileObj.familyName,
+        //         imageUrl: response.profileObj.imageUrl,
+        //         email: response.profileObj.email
+        //     })
+        //         .then(function (response) {
+        //             console.log(response);
+        //         })
+        //         .catch(function (error) {
+        //             console.log(error);
+        //         });
+        // } catch (error) {
+        //     console.log(error)
+        // }
 
 
     }
-    const CheckLogout = () => {
-        setIsLogin(false)
-        console.log("Log out success")
+
+    const handleGoogleLoginFailure = (response: any) => {
+
     }
 
     const menuId = 'primary-search-account-menu';
@@ -91,18 +94,13 @@ export default function NavBar() {
             </MenuItem>
             <Divider />
             <MenuItem onClick={() => {
-                setIsLogin(false)
                 setIsMenuOpen(false)
             }}>
-                <ListItemIcon>
-                    <LogoutIcon fontSize="small" />
-                </ListItemIcon>
                 <ListItemText>
                     <GoogleLogout
                         clientId={clientID}
                         buttonText="Logout"
-                        onLogoutSuccess={CheckLogout}
-
+                        onLogoutSuccess={logout}
                     /></ListItemText>
             </MenuItem>
         </Menu>
@@ -139,14 +137,12 @@ export default function NavBar() {
                             <GoogleLogin
                                 clientId={clientID}
                                 buttonText="Login"
-                                onSuccess={responseGoogle}
-                                onFailure={responseGoogle}
+                                onSuccess={handleGoogleLoginSuccess}
+                                onFailure={handleGoogleLoginFailure}
                                 cookiePolicy={'single_host_origin'}
                                 isSignedIn={true}
-
                             />
                         )}
-
                     </Box>
 
 
