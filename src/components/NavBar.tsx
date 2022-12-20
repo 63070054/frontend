@@ -33,20 +33,27 @@ export default function NavBar() {
 
     const responseGoogle = (response: any) => {
         console.log(response)
-        axios.post('http://localhost:8080/user', {
-            favorite: [],
-            owner: [],
-            fname: response.profileObj.givenName,
-            lname: response.profileObj.familyName,
-            imageurl: response.profileObj.imageUrl,
-            email: response.profileObj.email
-        })
-            .then(function (response) {
-                console.log(response);
+        setIsLogin(true)
+
+        try {
+            axios.post('http://localhost:8080/user', {
+                favorite: [],
+                owner: [],
+                fname: response.profileObj.givenName,
+                lname: response.profileObj.familyName,
+                imageurl: response.profileObj.imageUrl,
+                email: response.profileObj.email
             })
-            .catch(function (error) {
-                console.log(error);
-            });
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        } catch (error) {
+            console.log(error)
+        }
+
 
     }
     const CheckLogout = () => {
@@ -149,3 +156,4 @@ export default function NavBar() {
         </Box>
     );
 }
+
