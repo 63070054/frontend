@@ -5,17 +5,19 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import {
   createBrowserRouter,
+  RouterProvider
 } from "react-router-dom";
 import HomeScreen from './screens/HomeScreen';
 import BeerDetailScreen from './screens/BeerDetailScreen';
 import BeerCreateScreen from './screens/BeerCreateScreen';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { useEffect } from 'react'
+import { Children, useEffect } from 'react'
 import { gapi } from 'gapi-script';
 import NavBar from './components/NavBar';
-import { Router } from 'react-router-dom';
 import amqp from "amqplib"
 import { useState } from 'react';
+import MyBeerScreen from './screens/MyBeerScreen';
+import FavoriteBeerScreen from './screens/FavoriteBeerScreen';
 function App() {
 
   const clientID = "971797688819-5osp62f7rkgko6ul3uvdja8k8q9jg80p.apps.googleusercontent.com";
@@ -46,16 +48,30 @@ function App() {
     [
       {
         path: "/",
-        element: <HomeScreen />,
+        element: <NavBar login={login} logout={logout} isLogin={isLogin} />,
+        children: [
+          {
+            path: "/",
+            element: <HomeScreen isLogin={isLogin} />,
+          },
+          {
+            path: "/createBeer",
+            element: <BeerCreateScreen isLogin={isLogin} />,
+          },
+          {
+            path: "/beer/:id",
+            element: <BeerDetailScreen isLogin={isLogin} />,
+          },
+          {
+            path: "/favoriteBeers",
+            element: <FavoriteBeerScreen isLogin={isLogin} />,
+          },
+          {
+            path: "/myBeers",
+            element: <MyBeerScreen isLogin={isLogin} />,
+          }
+        ]
       },
-      {
-        path: "/createBeer",
-        element: <BeerCreateScreen />,
-      },
-      {
-        path: "/beer/:id",
-        element: <BeerDetailScreen />,
-      }
     ]
   )
 
@@ -68,8 +84,7 @@ function App() {
   return (
     <>
       <ThemeProvider theme={darkTheme}>
-        <NavBar login={login} logout={logout} isLogin={isLogin} />
-        {/* <RouterProvider router={router} isLogin={isLogin} /> */}
+        <RouterProvider router={router} />
       </ThemeProvider>
     </>
   );

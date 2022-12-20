@@ -17,6 +17,8 @@ import Button from '@mui/material/Button';
 import axios from 'axios';
 import { GoogleLogin } from 'react-google-login';
 import { GoogleLogout } from 'react-google-login';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 interface NavBarProps {
     login: () => void;
@@ -25,6 +27,9 @@ interface NavBarProps {
 }
 
 export default function NavBar({ login, logout, isLogin }: NavBarProps) {
+
+    const navigate = useNavigate();
+
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const clientID = "971797688819-5osp62f7rkgko6ul3uvdja8k8q9jg80p.apps.googleusercontent.com"
     const handleProfileMenuOpen = () => {
@@ -57,7 +62,10 @@ export default function NavBar({ login, logout, isLogin }: NavBarProps) {
         //     console.log(error)
         // }
 
+    }
 
+    const handleNavigateMenu = (path: string) => {
+        navigate(path)
     }
 
     const handleGoogleLoginFailure = (response: any) => {
@@ -80,13 +88,14 @@ export default function NavBar({ login, logout, isLogin }: NavBarProps) {
             open={isMenuOpen}
             onClose={handleProfileMenuClose}
         >
-            <MenuItem>
+
+            <MenuItem onClick={() => handleNavigateMenu("/myBeers")}>
                 <ListItemIcon>
                     <ContentCut fontSize="small" />
                 </ListItemIcon>
                 <ListItemText>My Beers</ListItemText>
             </MenuItem>
-            <MenuItem>
+            <MenuItem onClick={() => handleNavigateMenu("/favoriteBeers")}>
                 <ListItemIcon>
                     <FavoriteIcon fontSize="small" />
                 </ListItemIcon>
@@ -96,60 +105,64 @@ export default function NavBar({ login, logout, isLogin }: NavBarProps) {
             <MenuItem onClick={() => {
                 setIsMenuOpen(false)
             }}>
-                <ListItemText>
-                    <GoogleLogout
-                        clientId={clientID}
-                        buttonText="Logout"
-                        onLogoutSuccess={logout}
-                    /></ListItemText>
+                <GoogleLogout
+                    clientId={clientID}
+                    buttonText="Logout"
+                    onLogoutSuccess={logout}
+                />
             </MenuItem>
         </Menu>
     );
 
     return (
-        <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="sticky">
-                <Toolbar>
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="div"
-                        sx={{ display: { xs: 'block' } }}
-                        minWidth="fit-content"
-                    >
-                        Hold My Beers
-                    </Typography>
-                    <Box sx={{ flexGrow: 1 }} />
-                    <Box sx={{ display: { xs: 'flex' } }}>
-                        {isLogin ? (
-                            <IconButton
-                                size="large"
-                                edge="end"
-                                aria-label="account of current user"
-                                aria-controls={menuId}
-                                aria-haspopup="true"
-                                onClick={handleProfileMenuOpen}
-                                color="inherit"
+        <>
+            <Box sx={{ flexGrow: 1 }}>
+                <AppBar position="sticky">
+                    <Toolbar>
+                        <Link to="/" style={{ textDecoration: 'none', color: "white" }}>
+                            <Typography
+                                variant="h6"
+                                noWrap
+                                component="div"
+                                sx={{ display: { xs: 'block' } }}
+                                minWidth="fit-content"
                             >
-                                <AccountCircle />
-                            </IconButton>
-                        ) : (
-                            <GoogleLogin
-                                clientId={clientID}
-                                buttonText="Login"
-                                onSuccess={handleGoogleLoginSuccess}
-                                onFailure={handleGoogleLoginFailure}
-                                cookiePolicy={'single_host_origin'}
-                                isSignedIn={true}
-                            />
-                        )}
-                    </Box>
+                                Hold My Beers
+                            </Typography>
+                        </Link>
+                        <Box sx={{ flexGrow: 1 }} />
+                        <Box sx={{ display: { xs: 'flex' } }}>
+                            {isLogin ? (
+                                <IconButton
+                                    size="large"
+                                    edge="end"
+                                    aria-label="account of current user"
+                                    aria-controls={menuId}
+                                    aria-haspopup="true"
+                                    onClick={handleProfileMenuOpen}
+                                    color="inherit"
+                                >
+                                    <AccountCircle />
+                                </IconButton>
+                            ) : (
+                                <GoogleLogin
+                                    clientId={clientID}
+                                    buttonText="Login"
+                                    onSuccess={handleGoogleLoginSuccess}
+                                    onFailure={handleGoogleLoginFailure}
+                                    cookiePolicy={'single_host_origin'}
+                                    isSignedIn={true}
+                                />
+                            )}
+                        </Box>
 
 
-                </Toolbar>
-            </AppBar>
-            {renderMenu}
-        </Box>
+                    </Toolbar>
+                </AppBar>
+                {renderMenu}
+            </Box>
+            <Outlet />
+        </>
     );
 }
 

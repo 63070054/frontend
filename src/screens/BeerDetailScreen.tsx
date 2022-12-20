@@ -20,7 +20,11 @@ interface Beer {
     methods: string[];
 }
 
-export default function BeerDetailScreen() {
+interface IsLoginProp {
+    isLogin: boolean;
+}
+
+export default function BeerDetailScreen({ isLogin }: IsLoginProp) {
 
     const [beer, setBeer] = useState<Beer>({
         id: 4,

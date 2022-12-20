@@ -15,23 +15,10 @@ interface BeerProps {
     name: string;
     description: string;
     imageUrl: string;
+    isLogin: boolean;
 }
 
-export default function CardBeer({ id, name, description, imageUrl }: BeerProps) {
-    const [checkIsLogin, setCheckIsLogin] = useState(null);
-
-    // useEffect(() => {
-
-    //     try {
-    //         setCheckIsLogin(gapi.auth.getToken().access_token)
-    //         var auth2 = gapi.auth2.getAuthInstance();
-    //         var profile = auth2.currentUser.get().getBasicProfile();
-    //         console.log(profile)
-
-    //     } catch (error) {
-    //         console.log(error)
-    //     }
-    // }, [])
+export default function CardBeer({ id, name, description, imageUrl, isLogin }: BeerProps) {
 
     const MAX_LENGTH_DESCRIPTION = 30
 
@@ -60,9 +47,11 @@ export default function CardBeer({ id, name, description, imageUrl }: BeerProps)
                 </Typography>
             </CardContent>
             <CardActions>
-                <IconButton aria-label="add to favorites" onClick={() => addToFavoriteBeer("3")} style={{ display: checkIsLogin != null ? "flex" : "none" }}>
-                    <FavoriteIcon />
-                </IconButton>
+                {isLogin && (
+                    <IconButton aria-label="add to favorites" onClick={() => addToFavoriteBeer("3")}>
+                        <FavoriteIcon />
+                    </IconButton>
+                )}
                 {id != 0 ? (
                     <Link style={{ textDecoration: 'none' }} to={`/beer/${id}`}>
                         <Button size="small">อ่านเพิ่มเติม</Button>

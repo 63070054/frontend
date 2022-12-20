@@ -6,9 +6,10 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import axios from 'axios';
+import { useNavigate } from 'react-router';
 
 import CardBeer from '../components/CardBeer';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface Ingredient {
     name: string;
@@ -16,7 +17,13 @@ interface Ingredient {
     unit: string;
 }
 
-export default function BeerCreateScreen() {
+interface IsLoginProp {
+    isLogin: boolean;
+}
+
+export default function BeerCreateScreen({ isLogin }: IsLoginProp) {
+
+    const navigate = useNavigate();
 
     const [nameBeer, setNameBeer] = useState<string>('')
     const [descriptionBeer, setDescriptionBeer] = useState<string>('')
@@ -24,6 +31,8 @@ export default function BeerCreateScreen() {
     const [fileImage, setFileImage] = useState<File | null>(null)
     const [ingredients, setIngredients] = useState<Ingredient[]>([])
     const [methods, setMethods] = useState<string[]>([])
+
+    if (!isLogin) navigate("/")
 
     const handlerFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) return;
@@ -89,7 +98,7 @@ export default function BeerCreateScreen() {
 
 
     return (
-        <>
+        <>Container
             <Container maxWidth="sm" className="p-16">
                 <Grid container>
                     <Grid item xs={7} className="p-16">
@@ -119,7 +128,7 @@ export default function BeerCreateScreen() {
                         </Stack>
                     </Grid>
                     <Grid item xs={5} className="p-16">
-                        <CardBeer id={0} name={nameBeer} description={descriptionBeer} imageUrl={imageUrl} />
+                        <CardBeer id={0} name={nameBeer} description={descriptionBeer} imageUrl={imageUrl} isLogin={isLogin} />
                     </Grid>
                     <Grid item xs={12} className="p-16">
                         <Stack spacing={2}>
