@@ -32,9 +32,8 @@ export default function NavBar() {
     };
 
     const responseGoogle = (response: any) => {
-        setIsLogin(true)
         console.log(response)
-        const obj = {
+        axios.post('http://localhost:8080/user', {
             favorite: [],
             owner: [],
             accessToken: response.accessToken,
@@ -43,19 +42,14 @@ export default function NavBar() {
             lname: response.profileObj.familyName,
             imageurl: response.profileObj.imageUrl,
             email: response.profileObj.email
-
-        };
-        const json = JSON.stringify(obj);
-        const blob = new Blob([json], {
-            type: 'application/json'
-        });
-        const data = new FormData();
-        data.append("document", blob);
-        axios({
-            method: 'post',
-            url: 'http://localhost:8080/User',
-            data: data,
         })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+
     }
     const CheckLogout = () => {
         setIsLogin(false)
