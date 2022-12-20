@@ -27,14 +27,7 @@ function App() {
     gapi.load("client:auth2", start)
   }, [])
 
-  try {
-    var check = gapi.auth.getToken().access_token
-    console.log("-------")
-    console.log(check)
 
-  } catch (error) {
-    console.log(error)
-  }
   const router = createBrowserRouter(
     [
       {

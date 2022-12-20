@@ -8,6 +8,7 @@ import CardBeer from "../components/CardBeer";
 import { useState } from "react";
 import { SelectChangeEvent } from '@mui/material/Select';
 import { Link } from "react-router-dom";
+import { gapi } from 'gapi-script';
 
 interface Beer {
     id: number;
@@ -18,6 +19,16 @@ interface Beer {
 }
 
 export default function HomeScreen() {
+
+    // try {
+    //     var auth2 = gapi.auth2.getAuthInstance();
+    //     var profile = auth2.currentUser.get().getBasicProfile();
+    //     console.log(profile)
+
+    // } catch (error) {
+    //     console.log(error)
+    // }
+
     const [queryBeer, setQueryBeer] = useState<string>('')
     const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
 
