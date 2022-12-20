@@ -1,25 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './assets/style.css';
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import HomeScreen from './screens/HomeScreen';
+import BeerDetailScreen from './screens/BeerDetailScreen';
+import BeerCreateScreen from './screens/BeerCreateScreen';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 function App() {
+
+  const router = createBrowserRouter(
+    [
+      {
+        path: "/",
+        element: <HomeScreen />,
+      },
+      {
+        path: "/createBeer",
+        element: <BeerCreateScreen />,
+      },
+      {
+        path: "/beer/:id",
+        element: <BeerDetailScreen />,
+      }
+    ]
+  )
+
+  const darkTheme = createTheme({
+    palette: {
+      mode: 'dark',
+    },
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <ThemeProvider theme={darkTheme}>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </>
   );
 }
 
