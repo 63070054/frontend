@@ -14,7 +14,7 @@ import ContentCut from '@mui/icons-material/ContentCut';
 import LogoutIcon from '@mui/icons-material/Logout';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Button from '@mui/material/Button';
-
+import axios from 'axios';
 import { GoogleLogin } from 'react-google-login';
 import { GoogleLogout } from 'react-google-login';
 
@@ -33,7 +33,29 @@ export default function NavBar() {
 
     const responseGoogle = (response: any) => {
         setIsLogin(true)
-        console.log(response);
+        console.log(response)
+        const obj = {
+            favorite: [],
+            owner: [],
+            accessToken: response.accessToken,
+            refreshToken: "",
+            fname: response.profileObj.givenName,
+            lname: response.profileObj.familyName,
+            imageurl: response.profileObj.imageUrl,
+            email: response.profileObj.email
+
+        };
+        const json = JSON.stringify(obj);
+        const blob = new Blob([json], {
+            type: 'application/json'
+        });
+        const data = new FormData();
+        data.append("document", blob);
+        axios({
+            method: 'post',
+            url: 'http://localhost:8080/User',
+            data: data,
+        })
     }
     const CheckLogout = () => {
         setIsLogin(false)

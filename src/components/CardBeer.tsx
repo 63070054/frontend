@@ -8,6 +8,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import IconButton from '@mui/material/IconButton';
 import { Link } from 'react-router-dom';
 import { gapi } from 'gapi-script';
+import { useState, useEffect } from 'react'
 
 interface BeerProps {
     id: number;
@@ -17,16 +18,20 @@ interface BeerProps {
 }
 
 export default function CardBeer({ id, name, description, imageUrl }: BeerProps) {
-    let check = null
+    const [checkIsLogin, setCheckIsLogin] = useState(null);
 
-    // try {
-    //     check = gapi.auth.getToken().access_token
+    useEffect(() => {
 
-    // } catch (error) {
-    //     console.log(error)
-    //     check = null
+        try {
+            setCheckIsLogin(gapi.auth.getToken().access_token)
+            var auth2 = gapi.auth2.getAuthInstance();
+            var profile = auth2.currentUser.get().getBasicProfile();
+            console.log(profile)
 
-    // }
+        } catch (error) {
+            console.log(error)
+        }
+    }, [])
 
     const MAX_LENGTH_DESCRIPTION = 30
 
@@ -55,7 +60,7 @@ export default function CardBeer({ id, name, description, imageUrl }: BeerProps)
                 </Typography>
             </CardContent>
             <CardActions>
-                <IconButton aria-label="add to favorites" onClick={() => addToFavoriteBeer("3")} style={{ display: check != null ? "flex" : "none" }}>
+                <IconButton aria-label="add to favorites" onClick={() => addToFavoriteBeer("3")} style={{ display: checkIsLogin != null ? "flex" : "none" }}>
                     <FavoriteIcon />
                 </IconButton>
                 {id != 0 ? (
