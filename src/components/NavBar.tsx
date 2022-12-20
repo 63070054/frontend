@@ -36,8 +36,6 @@ export default function NavBar() {
         axios.post('http://localhost:8080/user', {
             favorite: [],
             owner: [],
-            accessToken: response.accessToken,
-            refreshToken: "",
             fname: response.profileObj.givenName,
             lname: response.profileObj.familyName,
             imageurl: response.profileObj.imageUrl,
