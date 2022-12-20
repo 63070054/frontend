@@ -16,6 +16,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import Button from '@mui/material/Button';
 
 import { GoogleLogin } from 'react-google-login';
+import { GoogleLogout } from 'react-google-login';
 
 
 export default function NavBar() {
@@ -31,8 +32,14 @@ export default function NavBar() {
     };
 
     const responseGoogle = (response: any) => {
+        setIsLogin(true)
         console.log(response);
     }
+    const CheckLogout = () => {
+        setIsLogin(false)
+        console.log("Log out success")
+    }
+
     const menuId = 'primary-search-account-menu';
     const renderMenu = (
         <Menu
@@ -69,7 +76,13 @@ export default function NavBar() {
                 <ListItemIcon>
                     <LogoutIcon fontSize="small" />
                 </ListItemIcon>
-                <ListItemText>Sign out</ListItemText>
+                <ListItemText>
+                    <GoogleLogout
+                        clientId={clientID}
+                        buttonText="Logout"
+                        onLogoutSuccess={CheckLogout}
+
+                    /></ListItemText>
             </MenuItem>
         </Menu>
     );
@@ -102,21 +115,20 @@ export default function NavBar() {
                                 <AccountCircle />
                             </IconButton>
                         ) : (
-                            <Button onClick={() => setIsLogin(true)} variant="outlined" startIcon={<Google />}>
-                                Sign in
-                            </Button>
+                            <GoogleLogin
+                                clientId={clientID}
+                                buttonText="Login"
+                                onSuccess={responseGoogle}
+                                onFailure={responseGoogle}
+                                cookiePolicy={'single_host_origin'}
+                                isSignedIn={true}
+
+                            />
                         )}
 
                     </Box>
 
-                    <GoogleLogin
-                        clientId={clientID}
-                        buttonText="Login"
-                        onSuccess={responseGoogle}
-                        onFailure={responseGoogle}
-                        cookiePolicy={'single_host_origin'}
-                        isSignedIn={true}
-                    />
+
                 </Toolbar>
             </AppBar>
             {renderMenu}

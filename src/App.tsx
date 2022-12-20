@@ -11,10 +11,30 @@ import HomeScreen from './screens/HomeScreen';
 import BeerDetailScreen from './screens/BeerDetailScreen';
 import BeerCreateScreen from './screens/BeerCreateScreen';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { useEffect } from 'react'
+import { gapi } from 'gapi-script';
 function App() {
 
+  const clientID = "971797688819-5osp62f7rkgko6ul3uvdja8k8q9jg80p.apps.googleusercontent.com";
 
+  useEffect(() => {
+    function start() {
+      gapi.client.init({
+        clientID: clientID,
+        scope: ""
+      })
+    };
+    gapi.load("client:auth2", start)
+  }, [])
 
+  try {
+    var check = gapi.auth.getToken().access_token
+    console.log("-------")
+    console.log(check)
+
+  } catch (error) {
+    console.log(error)
+  }
   const router = createBrowserRouter(
     [
       {
