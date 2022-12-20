@@ -11,8 +11,9 @@ import HomeScreen from './screens/HomeScreen';
 import BeerDetailScreen from './screens/BeerDetailScreen';
 import BeerCreateScreen from './screens/BeerCreateScreen';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-
 function App() {
+
+
 
   const router = createBrowserRouter(
     [

@@ -15,13 +15,13 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import Button from '@mui/material/Button';
 
+import { GoogleLogin } from 'react-google-login';
 
 
 export default function NavBar() {
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const [isLogin, setIsLogin] = useState<boolean>(false);
-
-
+    const clientID = "971797688819-5osp62f7rkgko6ul3uvdja8k8q9jg80p.apps.googleusercontent.com"
     const handleProfileMenuOpen = () => {
         setIsMenuOpen(true)
     };
@@ -30,7 +30,9 @@ export default function NavBar() {
         setIsMenuOpen(false);
     };
 
-
+    const responseGoogle = (response: any) => {
+        console.log(response);
+    }
     const menuId = 'primary-search-account-menu';
     const renderMenu = (
         <Menu
@@ -106,6 +108,15 @@ export default function NavBar() {
                         )}
 
                     </Box>
+
+                    <GoogleLogin
+                        clientId={clientID}
+                        buttonText="Login"
+                        onSuccess={responseGoogle}
+                        onFailure={responseGoogle}
+                        cookiePolicy={'single_host_origin'}
+                        isSignedIn={true}
+                    />
                 </Toolbar>
             </AppBar>
             {renderMenu}
