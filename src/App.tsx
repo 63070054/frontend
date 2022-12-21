@@ -14,7 +14,6 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Children, useEffect } from 'react'
 import { gapi } from 'gapi-script';
 import NavBar from './components/NavBar';
-import amqp from "amqplib"
 import { useState } from 'react';
 import MyBeerScreen from './screens/MyBeerScreen';
 import FavoriteBeerScreen from './screens/FavoriteBeerScreen';
