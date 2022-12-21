@@ -16,11 +16,11 @@ interface Beer {
     imageUrl: string;
 }
 
-interface IsLoginProp {
-    isLogin: boolean;
+interface userInfoProp {
+    userInfo: boolean;
 }
 
-export default function HomeScreen({ isLogin }: IsLoginProp) {
+export default function HomeScreen({ userInfo }: userInfoProp) {
 
 
 
@@ -98,7 +98,7 @@ export default function HomeScreen({ isLogin }: IsLoginProp) {
                     <Grid item xs={12}>
                         <SelectFilterIngredients selectedIngredients={selectedIngredients} handleSelectIngredientsChange={handleSelectIngredientsChange} />
                     </Grid>
-                    {isLogin && (
+                    {userInfo && (
                         <Grid item xs={12}>
                             <Link to="/createBeer">
                                 <Button variant="contained" style={{ float: "right" }}>Create Beer</Button>
@@ -111,7 +111,7 @@ export default function HomeScreen({ isLogin }: IsLoginProp) {
                 <Grid container spacing={2}>
                     {filterBeers.map((beer, index) => (
                         <Grid item xs={4} key={index}>
-                            <CardBeer id={beer.id} name={beer.name} description={beer.description} imageUrl={beer.imageUrl} isLogin={isLogin} />
+                            <CardBeer id={beer.id} name={beer.name} description={beer.description} imageUrl={beer.imageUrl} userInfo={userInfo} />
                         </Grid>
                     ))}
                 </Grid>

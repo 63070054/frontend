@@ -16,20 +16,20 @@ interface BeerProps {
     name: string;
     description: string;
     imageUrl: string;
-    isLogin: boolean;
+    userInfo: boolean;
 }
 
-export default function CardBeer({ id, name, description, imageUrl, isLogin }: BeerProps) {
-    const [idUser, serIdUser] = useState('')
+export default function CardBeer({ id, name, description, imageUrl, userInfo }: BeerProps) {
+    const [userId, serUserId] = useState('')
 
     // let profile = auth2.currentUser.get().getBasicProfile();
-    // serIdUser(gapi.auth2.getAuthInstance().currentUser.get().googleId)
-    // console.log(idUser)
+    // seruserId(gapi.auth2.getAuthInstance().currentUser.get().googleId)
+    // console.log(userId)
     useEffect(() => {
-        if (isLogin) {
+        if (userInfo) {
             const auth2 = gapi.auth2.getAuthInstance();
             const googleId = auth2.currentUser.get().googleId
-            serIdUser(googleId)
+            serUserId(googleId)
         }
     }, [])
 
@@ -40,11 +40,11 @@ export default function CardBeer({ id, name, description, imageUrl, isLogin }: B
         description = description.slice(0, MAX_LENGTH_DESCRIPTION) + "...";
     }
 
-    const addToFavoriteBeer = (id: number) => {
+    const addToFavoriteBeer = (beerId: number) => {
         try {
             axios.post('http://localhost:8080/favorite/add', {
-                beerId: id,
-                userId: idUser
+                beerId: beerId,
+                userId: userId
             })
                 .then(function (response) {
                     console.log(response);
@@ -74,8 +74,8 @@ export default function CardBeer({ id, name, description, imageUrl, isLogin }: B
                 </Typography>
             </CardContent>
             <CardActions >
-                {(isLogin) && (
-                    <IconButton aria-label="add to favorites" onClick={() => addToFavoriteBeer(id)}>
+                {(userInfo) && (
+                    <IconButton aria-label="add to favorites" style={{ color: "rgb(240,128,128)" }} onClick={() => addToFavoriteBeer(id)}>
                         <FavoriteIcon />
                     </IconButton>
                 )}

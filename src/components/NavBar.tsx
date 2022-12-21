@@ -23,10 +23,10 @@ import { Link } from 'react-router-dom';
 interface NavBarProps {
     login: () => void;
     logout: () => void;
-    isLogin: boolean;
+    userInfo: boolean;
 }
 
-export default function NavBar({ login, logout, isLogin }: NavBarProps) {
+export default function NavBar({ login, logout, userInfo }: NavBarProps) {
 
     const navigate = useNavigate();
 
@@ -132,7 +132,7 @@ export default function NavBar({ login, logout, isLogin }: NavBarProps) {
                         </Link>
                         <Box sx={{ flexGrow: 1 }} />
                         <Box sx={{ display: { xs: 'flex' } }}>
-                            {isLogin ? (
+                            {userInfo ? (
                                 <IconButton
                                     size="large"
                                     edge="end"

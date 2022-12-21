@@ -22,12 +22,12 @@ interface Beer {
     methods: string[];
 }
 
-interface IsLoginProp {
-    isLogin: boolean;
+interface userInfoProp {
+    userInfo: boolean;
 
 }
 
-export default function BeerDetailScreen({ isLogin }: IsLoginProp) {
+export default function BeerDetailScreen({ userInfo }: userInfoProp) {
 
     const [beer, setBeer] = useState<Beer>({
         id: 4,
@@ -124,7 +124,7 @@ export default function BeerDetailScreen({ isLogin }: IsLoginProp) {
                         </Paper>
                     </Grid>
                     {
-                        isLogin && (
+                        userInfo && (
                             <Grid item xs={12}>
                                 <Paper className="p-16">
                                     <Box style={{ display: 'flex', width: '100%' }}>

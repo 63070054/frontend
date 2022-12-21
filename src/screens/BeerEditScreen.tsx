@@ -27,11 +27,11 @@ interface Beer {
     imageUrl: string;
 }
 
-interface IsLoginProp {
-    isLogin: boolean;
+interface userInfoProp {
+    userInfo: boolean;
 }
 
-export default function BeerEditScreen({ isLogin }: IsLoginProp) {
+export default function BeerEditScreen({ userInfo }: userInfoProp) {
     const params = useParams()
     const [beer, setBeer] = useState<Beer>({
         id: 4,
@@ -53,7 +53,7 @@ export default function BeerEditScreen({ isLogin }: IsLoginProp) {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!isLogin) {
+        if (!userInfo) {
             navigate("/")
         }
     }, [])
@@ -189,7 +189,7 @@ export default function BeerEditScreen({ isLogin }: IsLoginProp) {
                         </Stack>
                     </Grid>
                     <Grid item xs={5} className="p-16">
-                        <CardBeer id={0} name={nameBeer} description={descriptionBeer} imageUrl={imageUrl} isLogin={isLogin} />
+                        <CardBeer id={0} name={nameBeer} description={descriptionBeer} imageUrl={imageUrl} userInfo={userInfo} />
                     </Grid>
                     <Grid item xs={12} className="p-16">
                         <Stack spacing={2}>

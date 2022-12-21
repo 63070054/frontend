@@ -5,8 +5,8 @@ import CardBeer from "../components/CardBeer";
 import Typography from '@mui/material/Typography';
 import { useNavigate } from "react-router";
 
-interface IsLoginProp {
-    isLogin: boolean;
+interface userInfoProp {
+    userInfo: boolean;
 }
 
 interface Beer {
@@ -19,7 +19,7 @@ interface Beer {
 
 
 
-export default function MyBeerScreen({ isLogin }: IsLoginProp) {
+export default function MyBeerScreen({ userInfo }: userInfoProp) {
 
     const navigate = useNavigate()
 
@@ -64,7 +64,7 @@ export default function MyBeerScreen({ isLogin }: IsLoginProp) {
     },]);
 
     useEffect(() => {
-        if (!isLogin) {
+        if (!userInfo) {
             navigate("/")
         }
     }, [])
@@ -76,7 +76,7 @@ export default function MyBeerScreen({ isLogin }: IsLoginProp) {
             <Grid container spacing={2} className="pt-16">
                 {beers.map((beer, index) => (
                     <Grid item xs={4} key={index}>
-                        <CardBeer id={beer.id} name={beer.name} description={beer.description} imageUrl={beer.imageUrl} isLogin={isLogin} />
+                        <CardBeer id={beer.id} name={beer.name} description={beer.description} imageUrl={beer.imageUrl} userInfo={userInfo} />
                     </Grid>
                 ))}
             </Grid>

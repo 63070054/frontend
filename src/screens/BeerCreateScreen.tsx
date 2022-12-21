@@ -19,11 +19,11 @@ interface Ingredient {
     unit: string;
 }
 
-interface IsLoginProp {
-    isLogin: boolean;
+interface userInfoProp {
+    userInfo: boolean;
 }
 
-export default function BeerCreateScreen({ isLogin }: IsLoginProp) {
+export default function BeerCreateScreen({ userInfo }: userInfoProp) {
 
     const navigate = useNavigate();
 
@@ -37,7 +37,7 @@ export default function BeerCreateScreen({ isLogin }: IsLoginProp) {
     const [openSnackBarSuccess, setOpenSnackBarSuccess] = useState(false);
 
     useEffect(() => {
-        if (!isLogin) {
+        if (!userInfo) {
             navigate("/")
         }
     }, [])
@@ -166,7 +166,7 @@ export default function BeerCreateScreen({ isLogin }: IsLoginProp) {
                         </Stack>
                     </Grid>
                     <Grid item xs={5} className="p-16">
-                        <CardBeer id={0} name={nameBeer} description={descriptionBeer} imageUrl={imageUrl} isLogin={isLogin} />
+                        <CardBeer id={0} name={nameBeer} description={descriptionBeer} imageUrl={imageUrl} userInfo={userInfo} />
                     </Grid>
                     <Grid item xs={12} className="p-16">
                         <Stack spacing={2}>
