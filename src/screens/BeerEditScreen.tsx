@@ -13,42 +13,38 @@ import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
 // import { useState, useEffect } from 'react';
 // import { Alert } from '@mui/material';
 
-// interface Ingredient {
-//     name: string;
-//     quantity: number;
-//     unit: string;
-// }
-// interface Beer {
-//     id: number;
-//     name: string;
-//     description: string;
-//     ingredients: Ingredient[];
-//     methods: string[];
-//     imageUrl: string;
-// }
+interface Ingredient {
+    name: string;
+    quantity: number;
+    unit: string;
+}
+interface Beer {
+    _id: string;
+    name: string;
+    description: string;
+    ingredients: Ingredient[];
+    methods: string[];
+    imageUrl: string;
+    userId: string;
+}
+
+interface User {
+    googleId: string;
+    favorite: Beer[];
+    owner: Beer[];
+    firstName: string;
+    lastName: string;
+    email: string;
+    imageUrl: string;
+}
 
 interface userInfoProp {
-    userInfo: boolean;
+    userInfo: User | null;
 }
 
 export default function BeerEditScreen({ userInfo }: userInfoProp) {
     const params = useParams()
-    const [beer, setBeer] = useState<Beer>({
-        id: 4,
-        name: "เบียร์แมว",
-        description: "เบียร์ที่ทำจากแมวช็อคโกแลต",
-        ingredients: [{
-            name: "ช็อคโกแลต",
-            quantity: 3,
-            unit: "แท่ง"
-        }, {
-            name: "หม้อ",
-            quantity: 1,
-            unit: "อัน"
-        }],
-        methods: ['เอาช็อคโกแลตไปไก่', 'เอาไก่ไปต้ม', 'พร้อมรับประทาน'],
-        imageUrl: "https://img.redbull.com/images/c_fill,w_1200,h_630,g_auto,f_auto,q_auto/redbullcom/2016/09/20/1331818966444_2/pok%C3%A9mon-super-mystery-dungeon"
-    });
+    const [beer, setBeer] = useState<Beer | null>(null);
 
 //     const navigate = useNavigate();
 
@@ -58,14 +54,14 @@ export default function BeerEditScreen({ userInfo }: userInfoProp) {
         }
     }, [])
 
-    const [nameBeer, setNameBeer] = useState<string>(beer.name)
-    const [descriptionBeer, setDescriptionBeer] = useState<string>(beer.description)
-    const [imageUrl, setImageUrl] = useState<string>(beer.imageUrl)
+    const [nameBeer, setNameBeer] = useState<string>(beer?.name || "")
+    const [descriptionBeer, setDescriptionBeer] = useState<string>(beer?.description || "")
+    const [imageUrl, setImageUrl] = useState<string>(beer?.imageUrl || "")
     const [fileImage, setFileImage] = useState<File | null>(null)
-    const [ingredients, setIngredients] = useState<Ingredient[]>(beer.ingredients)
-    const [methods, setMethods] = useState<string[]>(beer.methods)
-    const [openSnackBar, setOpenSnackBar] = useState(false);
-    const [openSnackBarSuccess, setOpenSnackBarSuccess] = useState(false);
+    const [ingredients, setIngredients] = useState<Ingredient[]>(beer?.ingredients || [])
+    const [methods, setMethods] = useState<string[]>(beer?.methods || [])
+    const [openSnackBar, setOpenSnackBar] = useState<boolean>(false);
+    const [openSnackBarSuccess, setOpenSnackBarSuccess] = useState<boolean>(false);
 
 
 //     const handleClose = () => {
@@ -158,6 +154,11 @@ export default function BeerEditScreen({ userInfo }: userInfoProp) {
 //         }
 //     }
 
+    let isLogin = false;
+    if (userInfo) {
+        isLogin = true;
+    }
+
     return (
         <>
             <Container maxWidth="sm" className="p-16">
@@ -189,7 +190,7 @@ export default function BeerEditScreen({ userInfo }: userInfoProp) {
                         </Stack>
                     </Grid>
                     <Grid item xs={5} className="p-16">
-                        <CardBeer id={0} name={nameBeer} description={descriptionBeer} imageUrl={imageUrl} userInfo={userInfo} />
+                        <CardBeer id={"0"} name={nameBeer} description={descriptionBeer} imageUrl={imageUrl} isLogin={isLogin} />
                     </Grid>
                     <Grid item xs={12} className="p-16">
                         <Stack spacing={2}>

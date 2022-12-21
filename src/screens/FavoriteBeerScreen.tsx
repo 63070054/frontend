@@ -8,22 +8,32 @@ import axios from "axios";
 import { gapi } from "gapi-script";
 
 interface userInfoProp {
-    userInfo: boolean;
+    userInfo: User | null;
 }
 
 interface Ingredient {
-  name: string;
-  quantity: number;
-  unit: string;
+    name: string;
+    quantity: number;
+    unit: string;
 }
 interface Beer {
-  _id: string;
-  name: string;
-  description: string;
-  ingredients: Ingredient[];
-  methods: string[];
-  imageUrl: string;
-  userId: string;
+    _id: string;
+    name: string;
+    description: string;
+    ingredients: Ingredient[];
+    methods: string[];
+    imageUrl: string;
+    userId: string;
+}
+
+interface User {
+    googleId: string;
+    favorite: Beer[];
+    owner: Beer[];
+    firstName: string;
+    lastName: string;
+    email: string;
+    imageUrl: string;
 }
 
 interface User {
@@ -65,24 +75,36 @@ export default function FavoriteBeerScreen({ isLogin }: IsLoginProp) {
 
   if (!isLogin) navigate("/");
 
-  return (
-    <Container maxWidth="sm" className="p-16">
-      <Typography variant="h3">My Favorite Beers</Typography>
-      <Grid container spacing={2} className="pt-16">
-        {user?.favorite &&
-          user.favorite.map((beer, index) => (
-            <Grid item xs={4} key={index}>
-              <CardBeer
-                _id={beer._id}
-                name={beer.name}
-                description={beer.description}
-                imageUrl={beer.imageUrl}
-                isLogin={isLogin}
-                userId={beer.userId}
-              />
-            </Grid>
-          ))}
-      </Grid>
-    </Container>
-  );
+
+    const [beers, setBeers] = useState<Beer[]>([]);
+
+
+    useEffect(() => {
+        if (!userInfo) {
+            navigate("/")
+        }
+    }, [])
+
+    let isLogin = false;
+    if (userInfo) {
+        isLogin = true;
+    }
+
+
+    return (
+        <>
+            {beers && (
+                <Container maxWidth="sm" className="p-16">
+                    <Typography variant="h3">My Favorite Beers</Typography>
+                    <Grid container spacing={2} className="pt-16">
+                        {beers.map((beer, index) => (
+                            <Grid item xs={4} key={index}>
+                                <CardBeer id={beer._id} name={beer.name} description={beer.description} imageUrl={beer.imageUrl} isLogin={isLogin} />
+                            </Grid>
+                        ))}
+                    </Grid>
+                </Container>
+            )}
+        </>
+    )
 }

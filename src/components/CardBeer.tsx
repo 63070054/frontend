@@ -27,7 +27,7 @@ export default function CardBeer({ _id, name, description, imageUrl, isLogin }: 
     // seruserId(gapi.auth2.getAuthInstance().currentUser.get().googleId)
     // console.log(userId)
     useEffect(() => {
-        if (userInfo) {
+        if (isLogin) {
             const auth2 = gapi.auth2.getAuthInstance();
             const googleId = auth2.currentUser.get().googleId
             serUserId(googleId)
@@ -41,29 +41,10 @@ export default function CardBeer({ _id, name, description, imageUrl, isLogin }: 
         description = description.slice(0, MAX_LENGTH_DESCRIPTION) + "...";
     }
 
-    const deleteToFavoriteBeer = (beerIdInput: Number) => {
-        try {
-            axios.delete('http://localhost:8080/favorite/remove', {
-                data: {
-                    beerId: beerIdInput,
-                    userId: userId
-                }
-            })
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    const addToFavoriteBeer = (beerIdInput: number) => {
+    const addToFavoriteBeer = (beerId: string) => {
         try {
             axios.post('http://localhost:8080/favorite/add', {
-                beerId: beerIdInput,
+                beerId: beerId,
                 userId: userId
             })
                 .then(function (response) {
@@ -102,13 +83,11 @@ export default function CardBeer({ _id, name, description, imageUrl, isLogin }: 
                 {_id !== "0" ? (
                     <Link style={{ textDecoration: 'none' }} to={`/beer/${_id}`}>
                         <Button size="small">อ่านเพิ่มเติม</Button>
-                    </Link>
-                ) : (
-                    <Button size="small">อ่านเพิ่มเติม</Button>
-                )}
+                    )
+                }
 
 
-            </CardActions>
-        </Card>
+            </CardActions >
+        </Card >
     );
 }

@@ -46,13 +46,13 @@ function App() {
 
   const [userInfo, setuserInfo] = useState<User | null>(null);
 
-  const login = () => {
-    setuserInfo(true);
-  };
+  const login = (userInfo: User) => {
+    setuserInfo(userInfo);
+  }
 
   const logout = () => {
-    setuserInfo(false);
-  };
+    setuserInfo(null);
+  }
 
   useEffect(() => {
     const start = () => {
