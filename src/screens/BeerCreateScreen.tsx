@@ -34,6 +34,7 @@ export default function BeerCreateScreen({ isLogin }: IsLoginProp) {
     const [ingredients, setIngredients] = useState<Ingredient[]>([])
     const [methods, setMethods] = useState<string[]>([])
     const [openSnackBar, setOpenSnackBar] = useState(false);
+    const [openSnackBarSuccess, setOpenSnackBarSuccess] = useState(false);
 
     if (!isLogin) navigate("/")
 
@@ -41,7 +42,9 @@ export default function BeerCreateScreen({ isLogin }: IsLoginProp) {
     const handleClose = () => {
         setOpenSnackBar(false);
     };
-
+    const handleClosesuccess = () => {
+        setOpenSnackBarSuccess(false);
+    };
 
     const handlerFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) return;
@@ -87,28 +90,47 @@ export default function BeerCreateScreen({ isLogin }: IsLoginProp) {
     const submit = () => {
         const isIngredientsEmpty = ingredients.some(ingredient => ingredient.name == '' || ingredient.quantity == 0 || ingredient.unit == '');
         const isMethodsEmpty = methods.some(method => method == '');
-
-        if (!nameBeer || !ingredients || !imageUrl || !methods || isIngredientsEmpty || isMethodsEmpty) {
+        if (!nameBeer || !imageUrl || isIngredientsEmpty || isMethodsEmpty || !fileImage || ingredients.length == 0 || methods.length == 0) {
             setOpenSnackBar(true)
         }
-        if (!fileImage) return;
-        const API_KEY = '00002718d0f7d7ea69ee38b7ad9a6f15'
-        const headers = {
-            'content-type': 'multipart/form-data'
-        }
-        const formData = new FormData()
-        formData.append('key', API_KEY)
-        formData.append('media', fileImage)
-        try {
-            axios.post("https://thumbsnap.com/api/upload", formData, {
-                headers
-            }).then(result => {
-                console.log("image", result.data.data.thumb)
-            })
+        else {
+            setOpenSnackBarSuccess(true)
 
-        } catch (e) {
-            console.log(e)
+            const API_KEY = '00002718d0f7d7ea69ee38b7ad9a6f15'
+            const headers = {
+                'content-type': 'multipart/form-data'
+            }
+            const formData = new FormData()
+            formData.append('key', API_KEY)
+            formData.append('media', fileImage)
+            try {
+                axios.post("https://thumbsnap.com/api/upload", formData, {
+                    headers
+                }).then(result => {
+                    console.log("image", result.data.data.thumb)
+
+                    axios.post('http://localhost:8080/beers', {
+                        name: nameBeer,
+                        description: descriptionBeer,
+                        ingredients: ingredients,
+                        methods: methods,
+                        imageUrl: result.data.data.thumb
+                    })
+                        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+
+
+                })
+
+            } catch (e) {
+                console.log(e)
+            }
         }
+
     }
 
 
@@ -232,11 +254,20 @@ export default function BeerCreateScreen({ isLogin }: IsLoginProp) {
                                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                                 open={openSnackBar}
                                 onClose={handleClose}
-                                message="I love snacks"
 
                             >
                                 <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
                                     กรุณากรอกข้อมูลให้ครบถ้วน
+                                </Alert>
+                            </Snackbar>
+
+                            <Snackbar
+                                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                                open={openSnackBarSuccess}
+                                onClose={handleClosesuccess}
+                            >
+                                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                                    สร้างสูตรเบียร์สำเร็จ
                                 </Alert>
                             </Snackbar>
                         </Stack>

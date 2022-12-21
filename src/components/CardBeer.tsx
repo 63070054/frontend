@@ -7,6 +7,8 @@ import Typography from '@mui/material/Typography';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import IconButton from '@mui/material/IconButton';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+
 interface BeerProps {
     id: number;
     name: string;
@@ -16,7 +18,6 @@ interface BeerProps {
 }
 
 export default function CardBeer({ id, name, description, imageUrl, isLogin }: BeerProps) {
-
 
     const MAX_LENGTH_DESCRIPTION = 30
 
