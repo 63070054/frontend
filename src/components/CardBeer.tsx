@@ -12,21 +12,21 @@ import { gapi } from 'gapi-script';
 import { useState, useEffect } from 'react';
 
 interface BeerProps {
-    id: number;
+    id: string;
     name: string;
     description: string;
     imageUrl: string;
-    userInfo: boolean;
+    isLogin: boolean;
 }
 
-export default function CardBeer({ id, name, description, imageUrl, userInfo }: BeerProps) {
+export default function CardBeer({ id, name, description, imageUrl, isLogin }: BeerProps) {
     const [userId, serUserId] = useState('')
 
     // let profile = auth2.currentUser.get().getBasicProfile();
     // seruserId(gapi.auth2.getAuthInstance().currentUser.get().googleId)
     // console.log(userId)
     useEffect(() => {
-        if (userInfo) {
+        if (isLogin) {
             const auth2 = gapi.auth2.getAuthInstance();
             const googleId = auth2.currentUser.get().googleId
             serUserId(googleId)
@@ -40,7 +40,7 @@ export default function CardBeer({ id, name, description, imageUrl, userInfo }: 
         description = description.slice(0, MAX_LENGTH_DESCRIPTION) + "...";
     }
 
-    const addToFavoriteBeer = (beerId: number) => {
+    const addToFavoriteBeer = (beerId: string) => {
         try {
             axios.post('http://localhost:8080/favorite/add', {
                 beerId: beerId,
@@ -74,12 +74,12 @@ export default function CardBeer({ id, name, description, imageUrl, userInfo }: 
                 </Typography>
             </CardContent>
             <CardActions >
-                {(userInfo) && (
+                {(isLogin) && (
                     <IconButton aria-label="add to favorites" style={{ color: "rgb(240,128,128)" }} onClick={() => addToFavoriteBeer(id)}>
                         <FavoriteIcon />
                     </IconButton>
                 )}
-                {id != 0 ? (
+                {id != "0" ? (
                     <Link style={{ textDecoration: 'none' }} to={`/beer/${id}`}>
                         <Button size="small">อ่านเพิ่มเติม</Button>
                     </Link>

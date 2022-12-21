@@ -21,9 +21,9 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 interface NavBarProps {
-    login: () => void;
+    login: (a: User) => void;
     logout: () => void;
-    userInfo: User;
+    userInfo: User | null;
 }
 interface Ingredient {
     name: string;
@@ -75,7 +75,9 @@ export default function NavBar({ login, logout, userInfo }: NavBarProps) {
                 email: response.profileObj.email,
                 imageUrl: response.profileObj.imageUrl,
             }
-            const res = await axios.post('http://localhost:8080/user/login', newUser)
+            await axios.post('http://localhost:8080/user/login', newUser)
+            const userInfo = await axios.get("http://localhost:8080/user/" + response.googleId)
+            console.log(userInfo)
 
         } catch (error) {
             console.log(error)

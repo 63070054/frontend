@@ -8,16 +8,33 @@ import { useState } from "react";
 import { SelectChangeEvent } from '@mui/material/Select';
 import { Link } from "react-router-dom";
 
+interface Ingredient {
+    name: string;
+    quantity: number;
+    unit: string;
+}
 interface Beer {
-    id: number;
+    _id: string;
     name: string;
     description: string;
-    ingredients: string[];
+    ingredients: Ingredient[];
+    methods: string[];
+    imageUrl: string;
+    userId: string;
+}
+
+interface User {
+    googleId: string;
+    favorite: Beer[];
+    owner: Beer[];
+    firstName: string;
+    lastName: string;
+    email: string;
     imageUrl: string;
 }
 
 interface userInfoProp {
-    userInfo: boolean;
+    userInfo: User | null;
 }
 
 export default function HomeScreen({ userInfo }: userInfoProp) {
@@ -36,50 +53,13 @@ export default function HomeScreen({ userInfo }: userInfoProp) {
         );
     };
 
-    const [beers, setBeers] = useState<Beer[]>([{
-        id: 1,
-        name: "เบียร์กาว",
-        description: "โคตรกาว",
-        ingredients: ['กาว'],
-        imageUrl: "https://media.istockphoto.com/id/1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w=",
-    }, {
-        id: 2,
-        name: "เบียร์ไก่",
-        description: "เบียร์ไก่",
-        ingredients: ['ไก่'],
-        imageUrl: "https://media.istockphoto.com/id/1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w=",
-    }, {
-        id: 3,
-        name: "เบียร์กาว",
-        description: "โคตรกาว",
-        ingredients: ['กาว'],
-        imageUrl: "https://media.istockphoto.com/id/1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w=",
-    }, {
-        id: 4,
-        name: "เบียร์ไก่",
-        description: "เบียร์ไก่",
-        ingredients: ['ไก่'],
-        imageUrl: "https://media.istockphoto.com/id/1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w=",
-    },
-    {
-        id: 5,
-        name: "เบียร์กาว",
-        description: "โคตรกาว",
-        ingredients: ['กาว'],
-        imageUrl: "https://media.istockphoto.com/id/1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w=",
-    }, {
-        id: 6,
-        name: "เบียร์ไก่เป็ด",
-        description: "เบียร์ไก่",
-        ingredients: ['ไก่', "เป็ด"],
-        imageUrl: "https://media.istockphoto.com/id/1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w=",
-    },]);
+    const [beers, setBeers] = useState<Beer[]>([]);
 
     let filterBeers = beers.filter(beer => beer.name.includes(queryBeer) || beer.description.includes(queryBeer))
 
     if (selectedIngredients.length > 0) {
         filterBeers = beers.filter(beer => {
-            return selectedIngredients.some(selectedIngredient => beer.ingredients.some(beerIngredient => beerIngredient.includes(selectedIngredient)))
+            return selectedIngredients.some(selectedIngredient => beer.ingredients.some(beerIngredient => beerIngredient.name.includes(selectedIngredient)))
         })
     }
 
@@ -87,6 +67,10 @@ export default function HomeScreen({ userInfo }: userInfoProp) {
         setQueryBeer(text)
     }
 
+    let isLogin = false;
+    if (userInfo) {
+        isLogin = true;
+    }
 
     return (
         <>
@@ -111,7 +95,7 @@ export default function HomeScreen({ userInfo }: userInfoProp) {
                 <Grid container spacing={2}>
                     {filterBeers.map((beer, index) => (
                         <Grid item xs={4} key={index}>
-                            <CardBeer id={beer.id} name={beer.name} description={beer.description} imageUrl={beer.imageUrl} userInfo={userInfo} />
+                            <CardBeer id={beer._id} name={beer.name} description={beer.description} imageUrl={beer.imageUrl} isLogin={isLogin} />
                         </Grid>
                     ))}
                 </Grid>

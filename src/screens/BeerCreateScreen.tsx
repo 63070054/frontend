@@ -18,9 +18,28 @@ interface Ingredient {
     quantity: number;
     unit: string;
 }
+interface Beer {
+    _id: string;
+    name: string;
+    description: string;
+    ingredients: Ingredient[];
+    methods: string[];
+    imageUrl: string;
+    userId: string;
+}
+
+interface User {
+    googleId: string;
+    favorite: Beer[];
+    owner: Beer[];
+    firstName: string;
+    lastName: string;
+    email: string;
+    imageUrl: string;
+}
 
 interface userInfoProp {
-    userInfo: boolean;
+    userInfo: User | null;
 }
 
 export default function BeerCreateScreen({ userInfo }: userInfoProp) {
@@ -134,6 +153,12 @@ export default function BeerCreateScreen({ userInfo }: userInfoProp) {
 
     }
 
+    let isLogin = false;
+
+    if (userInfo) {
+        isLogin = true;
+    }
+
 
     return (
         <>
@@ -166,7 +191,7 @@ export default function BeerCreateScreen({ userInfo }: userInfoProp) {
                         </Stack>
                     </Grid>
                     <Grid item xs={5} className="p-16">
-                        <CardBeer id={0} name={nameBeer} description={descriptionBeer} imageUrl={imageUrl} userInfo={userInfo} />
+                        <CardBeer id={"0"} name={nameBeer} description={descriptionBeer} imageUrl={imageUrl} isLogin={isLogin} />
                     </Grid>
                     <Grid item xs={12} className="p-16">
                         <Stack spacing={2}>
