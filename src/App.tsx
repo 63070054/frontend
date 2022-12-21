@@ -11,13 +11,13 @@ import HomeScreen from './screens/HomeScreen';
 import BeerDetailScreen from './screens/BeerDetailScreen';
 import BeerCreateScreen from './screens/BeerCreateScreen';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { Children, useEffect } from 'react'
+import { useEffect } from 'react'
 import { gapi } from 'gapi-script';
 import NavBar from './components/NavBar';
-import amqp from "amqplib"
 import { useState } from 'react';
 import MyBeerScreen from './screens/MyBeerScreen';
 import FavoriteBeerScreen from './screens/FavoriteBeerScreen';
+
 function App() {
 
   const clientID = "971797688819-5osp62f7rkgko6ul3uvdja8k8q9jg80p.apps.googleusercontent.com";
