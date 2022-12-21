@@ -18,21 +18,46 @@ interface Ingredient {
     quantity: number;
     unit: string;
 }
+interface Beer {
+    id: number;
+    name: string;
+    description: string;
+    ingredients: Ingredient[];
+    methods: string[];
+    imageUrl: string;
+}
 
 interface IsLoginProp {
     isLogin: boolean;
 }
 
-export default function BeerCreateScreen({ isLogin }: IsLoginProp) {
+export default function BeerEditScreen({ isLogin }: IsLoginProp) {
+
+    const [beer, setBeer] = useState<Beer>({
+        id: 4,
+        name: "เบียร์แมว",
+        description: "เบียร์ที่ทำจากแมวช็อคโกแลต",
+        ingredients: [{
+            name: "ช็อคโกแลต",
+            quantity: 3,
+            unit: "แท่ง"
+        }, {
+            name: "หม้อ",
+            quantity: 1,
+            unit: "อัน"
+        }],
+        methods: ['เอาช็อคโกแลตไปไก่', 'เอาไก่ไปต้ม', 'พร้อมรับประทาน'],
+        imageUrl: "https://img.redbull.com/images/c_fill,w_1200,h_630,g_auto,f_auto,q_auto/redbullcom/2016/09/20/1331818966444_2/pok%C3%A9mon-super-mystery-dungeon"
+    });
 
     const navigate = useNavigate();
 
-    const [nameBeer, setNameBeer] = useState<string>('')
-    const [descriptionBeer, setDescriptionBeer] = useState<string>('')
-    const [imageUrl, setImageUrl] = useState<string>("")
+    const [nameBeer, setNameBeer] = useState<string>(beer.name)
+    const [descriptionBeer, setDescriptionBeer] = useState<string>(beer.description)
+    const [imageUrl, setImageUrl] = useState<string>(beer.imageUrl)
     const [fileImage, setFileImage] = useState<File | null>(null)
-    const [ingredients, setIngredients] = useState<Ingredient[]>([])
-    const [methods, setMethods] = useState<string[]>([])
+    const [ingredients, setIngredients] = useState<Ingredient[]>(beer.ingredients)
+    const [methods, setMethods] = useState<string[]>(beer.methods)
     const [openSnackBar, setOpenSnackBar] = useState(false);
     const [openSnackBarSuccess, setOpenSnackBarSuccess] = useState(false);
 
@@ -108,7 +133,7 @@ export default function BeerCreateScreen({ isLogin }: IsLoginProp) {
                     headers
                 }).then(result => {
                     console.log("image", result.data.data.thumb)
-                    axios.post('http://localhost:8080/beers', {
+                    axios.put(`http://localhost:8080/beers/${beer.id}`, {
                         name: nameBeer,
                         description: descriptionBeer,
                         ingredients: ingredients,
@@ -127,7 +152,6 @@ export default function BeerCreateScreen({ isLogin }: IsLoginProp) {
                 console.log(e)
             }
         }
-
     }
 
 
@@ -138,7 +162,7 @@ export default function BeerCreateScreen({ isLogin }: IsLoginProp) {
                     <Grid item xs={7} className="p-16">
                         <Stack spacing={2}>
                             <Typography variant='h3'>
-                                Create Beer
+                                Edit Beer
                             </Typography>
                             <Button variant="contained" component="label">
                                 อัพโหลดรูปภาพเบียร์
@@ -244,7 +268,7 @@ export default function BeerCreateScreen({ isLogin }: IsLoginProp) {
                             ))}
 
                             <Button variant="contained" onClick={submit} color="success">
-                                ยืนยันการสร้างเบียร์
+                                ยืนยันการแก้ไขสูตรเบียร์
                             </Button>
                             <Snackbar
 
@@ -264,7 +288,7 @@ export default function BeerCreateScreen({ isLogin }: IsLoginProp) {
                                 onClose={handleClosesuccess}
                             >
                                 <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                                    สร้างสูตรเบียร์สำเร็จ
+                                    แก้ไขสูตรเบียร์สำเร็จ
                                 </Alert>
                             </Snackbar>
                         </Stack>
