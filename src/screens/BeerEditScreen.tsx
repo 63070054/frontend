@@ -6,7 +6,7 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import axios from 'axios';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
 
 import CardBeer from '../components/CardBeer';
@@ -32,7 +32,7 @@ interface IsLoginProp {
 }
 
 export default function BeerEditScreen({ isLogin }: IsLoginProp) {
-
+    const params = useParams()
     const [beer, setBeer] = useState<Beer>({
         id: 4,
         name: "เบียร์แมว",
@@ -133,7 +133,7 @@ export default function BeerEditScreen({ isLogin }: IsLoginProp) {
                     headers
                 }).then(result => {
                     console.log("image", result.data.data.thumb)
-                    axios.put(`http://localhost:8080/beers/${beer.id}`, {
+                    axios.put(`http://localhost:8080/beers/${params.id}`, {
                         name: nameBeer,
                         description: descriptionBeer,
                         ingredients: ingredients,
