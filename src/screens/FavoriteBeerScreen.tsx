@@ -1,14 +1,14 @@
-import Container from "@mui/system/Container";
-import { useState, useEffect } from "react";
-import Grid from "@mui/material/Grid";
+import Container from "@mui/system/Container"
+import { useEffect, useState } from "react";
+import Grid from "@mui/material/Grid"
 import CardBeer from "../components/CardBeer";
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import { gapi } from "gapi-script";
 
-interface IsLoginProp {
-  isLogin: boolean;
+interface userInfoProp {
+    userInfo: boolean;
 }
 
 interface Ingredient {

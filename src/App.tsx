@@ -15,18 +15,43 @@ import { useState } from "react";
 import MyBeerScreen from "./screens/MyBeerScreen";
 import FavoriteBeerScreen from "./screens/FavoriteBeerScreen";
 // import BeerEditScreen from './screens/BeerEditScreen';
-function App() {
-  const clientID =
-    "971797688819-5osp62f7rkgko6ul3uvdja8k8q9jg80p.apps.googleusercontent.com";
+interface Ingredient {
+  name: string;
+  quantity: number;
+  unit: string;
+}
+interface Beer {
+  _id: string;
+  name: string;
+  description: string;
+  ingredients: Ingredient[];
+  methods: string[];
+  imageUrl: string;
+  userId: string;
+}
 
-  const [isLogin, setIsLogin] = useState<boolean>(false);
+interface User {
+  googleId: string;
+  favorite: Beer[];
+  owner: Beer[];
+  firstName: string;
+  lastName: string;
+  email: string;
+  imageUrl: string;
+}
+
+function App() {
+
+  const clientID = "971797688819-5osp62f7rkgko6ul3uvdja8k8q9jg80p.apps.googleusercontent.com";
+
+  const [userInfo, setuserInfo] = useState<User | null>(null);
 
   const login = () => {
-    setIsLogin(true);
+    setuserInfo(true);
   };
 
   const logout = () => {
-    setIsLogin(false);
+    setuserInfo(false);
   };
 
   useEffect(() => {
@@ -42,31 +67,31 @@ function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <NavBar login={login} logout={logout} isLogin={isLogin} />,
+      element: <NavBar login={login} logout={logout} userInfo={userInfo} />,
       children: [
         {
           path: "/",
-          element: <HomeScreen isLogin={isLogin} />,
+          element: <HomeScreen userInfo={userInfo} />,
         },
         {
           path: "/createBeer",
-          element: <BeerCreateScreen isLogin={isLogin} />,
+          element: <BeerCreateScreen userInfo={userInfo} />,
         },
         {
           path: "/beer/:id",
-          element: <BeerDetailScreen isLogin={isLogin} />,
+          element: <BeerDetailScreen userInfo={userInfo} />,
         },
         {
           path: "/favoriteBeers",
-          element: <FavoriteBeerScreen isLogin={isLogin} />,
+          element: <FavoriteBeerScreen userInfo={userInfo} />,
         },
         {
           path: "/myBeers",
-          element: <MyBeerScreen isLogin={isLogin} />,
+          element: <MyBeerScreen userInfo={userInfo} />,
         },
         // {
         //   path: "/editBeer/:id",
-        //   element: <BeerEditScreen isLogin={isLogin} />,
+        //   element: <BeerEditScreen userInfo={userInfo} />,
         // }
       ],
     },

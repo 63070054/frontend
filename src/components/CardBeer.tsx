@@ -24,13 +24,13 @@ export default function CardBeer({ _id, name, description, imageUrl, isLogin }: 
     const [idUser, serIdUser] = useState('')
 
     // let profile = auth2.currentUser.get().getBasicProfile();
-    // serIdUser(gapi.auth2.getAuthInstance().currentUser.get().googleId)
-    // console.log(idUser)
+    // seruserId(gapi.auth2.getAuthInstance().currentUser.get().googleId)
+    // console.log(userId)
     useEffect(() => {
-        if (isLogin) {
+        if (userInfo) {
             const auth2 = gapi.auth2.getAuthInstance();
             const googleId = auth2.currentUser.get().googleId
-            serIdUser(googleId)
+            serUserId(googleId)
         }
     }, [])
 
@@ -41,11 +41,30 @@ export default function CardBeer({ _id, name, description, imageUrl, isLogin }: 
         description = description.slice(0, MAX_LENGTH_DESCRIPTION) + "...";
     }
 
-    const addToFavoriteBeer = (id: string) => {
+    const deleteToFavoriteBeer = (beerIdInput: Number) => {
+        try {
+            axios.delete('http://localhost:8080/favorite/remove', {
+                data: {
+                    beerId: beerIdInput,
+                    userId: userId
+                }
+            })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const addToFavoriteBeer = (beerIdInput: number) => {
         try {
             axios.post('http://localhost:8080/favorite/add', {
-                beerId: id,
-                userId: idUser
+                beerId: beerIdInput,
+                userId: userId
             })
                 .then(function (response) {
                     console.log(response);

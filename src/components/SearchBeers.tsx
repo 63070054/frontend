@@ -17,6 +17,7 @@ export default function SearchBeers({ queryBeer, handlerSearchBeer }: SearchBeer
             component="form"
             sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
             className="width-100"
+            elevation={2}
         >
             <InputBase
                 value={queryBeer}
