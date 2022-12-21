@@ -17,7 +17,7 @@ import NavBar from './components/NavBar';
 import { useState } from 'react';
 import MyBeerScreen from './screens/MyBeerScreen';
 import FavoriteBeerScreen from './screens/FavoriteBeerScreen';
-
+import BeerEditScreen from './screens/BeerEditScreen';
 function App() {
 
   const clientID = "971797688819-5osp62f7rkgko6ul3uvdja8k8q9jg80p.apps.googleusercontent.com";
@@ -69,6 +69,10 @@ function App() {
           {
             path: "/myBeers",
             element: <MyBeerScreen isLogin={isLogin} />,
+          },
+          {
+            path: "/editBeer/:id",
+            element: <BeerEditScreen isLogin={isLogin} />,
           }
         ]
       },
