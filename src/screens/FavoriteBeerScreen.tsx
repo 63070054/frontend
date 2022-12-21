@@ -1,5 +1,5 @@
 import Container from "@mui/system/Container"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid"
 import CardBeer from "../components/CardBeer";
 import Typography from '@mui/material/Typography';
@@ -64,7 +64,11 @@ export default function FavoriteBeerScreen({ isLogin }: IsLoginProp) {
     },]);
 
 
-    if (!isLogin) navigate("/")
+    useEffect(() => {
+        if (!isLogin) {
+            navigate("/")
+        }
+    }, [])
 
 
     return (
