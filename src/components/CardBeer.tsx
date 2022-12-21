@@ -12,14 +12,15 @@ import { gapi } from 'gapi-script';
 import { useState, useEffect } from 'react';
 
 interface BeerProps {
-    id: number;
+    _id: string;
     name: string;
     description: string;
     imageUrl: string;
+    userId: string;
     isLogin: boolean;
 }
 
-export default function CardBeer({ id, name, description, imageUrl, isLogin }: BeerProps) {
+export default function CardBeer({ _id, name, description, imageUrl, isLogin }: BeerProps) {
     const [idUser, serIdUser] = useState('')
 
     // let profile = auth2.currentUser.get().getBasicProfile();
@@ -40,7 +41,7 @@ export default function CardBeer({ id, name, description, imageUrl, isLogin }: B
         description = description.slice(0, MAX_LENGTH_DESCRIPTION) + "...";
     }
 
-    const addToFavoriteBeer = (id: number) => {
+    const addToFavoriteBeer = (id: string) => {
         try {
             axios.post('http://localhost:8080/favorite/add', {
                 beerId: id,
@@ -75,12 +76,12 @@ export default function CardBeer({ id, name, description, imageUrl, isLogin }: B
             </CardContent>
             <CardActions >
                 {(isLogin) && (
-                    <IconButton aria-label="add to favorites" onClick={() => addToFavoriteBeer(id)}>
+                    <IconButton aria-label="add to favorites" onClick={() => addToFavoriteBeer(_id)}>
                         <FavoriteIcon />
                     </IconButton>
                 )}
-                {id != 0 ? (
-                    <Link style={{ textDecoration: 'none' }} to={`/beer/${id}`}>
+                {_id !== "0" ? (
+                    <Link style={{ textDecoration: 'none' }} to={`/beer/${_id}`}>
                         <Button size="small">อ่านเพิ่มเติม</Button>
                     </Link>
                 ) : (
