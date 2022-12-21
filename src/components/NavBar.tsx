@@ -42,15 +42,15 @@ export default function NavBar({ login, logout, isLogin }: NavBarProps) {
 
     const handleGoogleLoginSuccess = (response: any) => {
         login();
-
         try {
             axios.post('http://localhost:8080/', {
+                googleId: response.googleId,
                 favorite: [],
                 owner: [],
-                firsrtName: response.profileObj.givenName,
+                firstName: response.profileObj.givenName,
                 lastName: response.profileObj.familyName,
+                email: response.profileObj.email,
                 imageUrl: response.profileObj.imageUrl,
-                email: response.profileObj.email
             })
                 .then(function (response) {
                     console.log(response);
