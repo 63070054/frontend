@@ -43,7 +43,7 @@ export default function NavBar({ login, logout, isLogin }: NavBarProps) {
     const handleGoogleLoginSuccess = (response: any) => {
         login();
         try {
-            axios.post('http://localhost:8080/', {
+            axios.post('http://localhost:8080/user/login', {
                 googleId: response.googleId,
                 favorite: [],
                 owner: [],
