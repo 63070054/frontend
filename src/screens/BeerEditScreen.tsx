@@ -52,6 +52,12 @@ export default function BeerEditScreen({ isLogin }: IsLoginProp) {
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if (!isLogin) {
+            navigate("/")
+        }
+    }, [])
+
     const [nameBeer, setNameBeer] = useState<string>(beer.name)
     const [descriptionBeer, setDescriptionBeer] = useState<string>(beer.description)
     const [imageUrl, setImageUrl] = useState<string>(beer.imageUrl)
@@ -60,8 +66,6 @@ export default function BeerEditScreen({ isLogin }: IsLoginProp) {
     const [methods, setMethods] = useState<string[]>(beer.methods)
     const [openSnackBar, setOpenSnackBar] = useState(false);
     const [openSnackBarSuccess, setOpenSnackBarSuccess] = useState(false);
-
-    if (!isLogin) navigate("/")
 
 
     const handleClose = () => {
@@ -153,7 +157,6 @@ export default function BeerEditScreen({ isLogin }: IsLoginProp) {
             }
         }
     }
-
 
     return (
         <>

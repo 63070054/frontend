@@ -36,7 +36,11 @@ export default function BeerCreateScreen({ isLogin }: IsLoginProp) {
     const [openSnackBar, setOpenSnackBar] = useState(false);
     const [openSnackBarSuccess, setOpenSnackBarSuccess] = useState(false);
 
-    if (!isLogin) navigate("/")
+    useEffect(() => {
+        if (!isLogin) {
+            navigate("/")
+        }
+    }, [])
 
 
     const handleClose = () => {
