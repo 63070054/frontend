@@ -7,6 +7,10 @@ import Typography from '@mui/material/Typography';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import IconButton from '@mui/material/IconButton';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { gapi } from 'gapi-script';
+import { useState, useEffect } from 'react';
+
 interface BeerProps {
     id: number;
     name: string;
@@ -16,6 +20,18 @@ interface BeerProps {
 }
 
 export default function CardBeer({ id, name, description, imageUrl, isLogin }: BeerProps) {
+    const [idUser, serIdUser] = useState('')
+
+    // let profile = auth2.currentUser.get().getBasicProfile();
+    // serIdUser(gapi.auth2.getAuthInstance().currentUser.get().googleId)
+    // console.log(idUser)
+    useEffect(() => {
+        if (isLogin) {
+            const auth2 = gapi.auth2.getAuthInstance();
+            const googleId = auth2.currentUser.get().googleId
+            serIdUser(googleId)
+        }
+    }, [])
 
 
     const MAX_LENGTH_DESCRIPTION = 30
@@ -24,8 +40,21 @@ export default function CardBeer({ id, name, description, imageUrl, isLogin }: B
         description = description.slice(0, MAX_LENGTH_DESCRIPTION) + "...";
     }
 
-    const addToFavoriteBeer = (id: string) => {
-        console.log("add")
+    const addToFavoriteBeer = (id: number) => {
+        try {
+            axios.post('http://localhost:8080/favorite/add', {
+                beerId: id,
+                userId: idUser
+            })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
@@ -46,7 +75,7 @@ export default function CardBeer({ id, name, description, imageUrl, isLogin }: B
             </CardContent>
             <CardActions >
                 {(isLogin) && (
-                    <IconButton aria-label="add to favorites" onClick={() => addToFavoriteBeer("3")}>
+                    <IconButton aria-label="add to favorites" onClick={() => addToFavoriteBeer(id)}>
                         <FavoriteIcon />
                     </IconButton>
                 )}
@@ -57,6 +86,8 @@ export default function CardBeer({ id, name, description, imageUrl, isLogin }: B
                 ) : (
                     <Button size="small">อ่านเพิ่มเติม</Button>
                 )}
+
+
             </CardActions>
         </Card>
     );

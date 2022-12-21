@@ -5,6 +5,8 @@ import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
+import { Link } from 'react-router-dom';
+import Button from '@mui/material/Button';
 
 interface Ingredient {
     name: string;
@@ -22,6 +24,7 @@ interface Beer {
 
 interface IsLoginProp {
     isLogin: boolean;
+
 }
 
 export default function BeerDetailScreen({ isLogin }: IsLoginProp) {
@@ -41,8 +44,9 @@ export default function BeerDetailScreen({ isLogin }: IsLoginProp) {
         }],
         methods: ['เอาช็อคโกแลตไปไก่', 'เอาไก่ไปต้ม', 'พร้อมรับประทาน']
     });
+    const deletebear = (id: number) => {
 
-
+    }
     return (
         <>
             <Container maxWidth="sm" className="p-16">
@@ -119,6 +123,27 @@ export default function BeerDetailScreen({ isLogin }: IsLoginProp) {
                             </Stack>
                         </Paper>
                     </Grid>
+                    {
+                        isLogin && (
+                            <Grid item xs={12}>
+                                <Paper className="p-16">
+                                    <Box style={{ display: 'flex', width: '100%' }}>
+
+                                        <Grid item xs={6}>
+                                            <Link to={`/editBeer/${beer.id}`}>
+                                                <Button variant="contained" style={{ float: "right" }}>Edit Beer</Button>
+                                            </Link>
+                                        </Grid>
+                                        <Grid item xs={3}>
+                                            <Button onClick={() => deletebear(beer.id)} variant="contained" style={{ float: "right" }}>Delete Beer</Button>
+                                        </Grid>
+                                    </Box>
+                                </Paper>
+                            </Grid>
+                        )
+                    }
+
+
                 </Grid>
             </Container>
         </>
