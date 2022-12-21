@@ -23,9 +23,32 @@ import { Link } from 'react-router-dom';
 interface NavBarProps {
     login: () => void;
     logout: () => void;
-    userInfo: boolean;
+    userInfo: User;
+}
+interface Ingredient {
+    name: string;
+    quantity: number;
+    unit: string;
+}
+interface Beer {
+    _id: string;
+    name: string;
+    description: string;
+    ingredients: Ingredient[];
+    methods: string[];
+    imageUrl: string;
+    userId: string;
 }
 
+interface User {
+    googleId: string;
+    favorite: Beer[];
+    owner: Beer[];
+    firstName: string;
+    lastName: string;
+    email: string;
+    imageUrl: string;
+}
 export default function NavBar({ login, logout, userInfo }: NavBarProps) {
 
     const navigate = useNavigate();
@@ -40,10 +63,10 @@ export default function NavBar({ login, logout, userInfo }: NavBarProps) {
         setIsMenuOpen(false);
     };
 
-    const handleGoogleLoginSuccess = (response: any) => {
-        login();
+    const handleGoogleLoginSuccess = async (response: any) => {
+
         try {
-            axios.post('http://localhost:8080/user/login', {
+            const newUser = {
                 googleId: response.googleId,
                 favorite: [],
                 owner: [],
@@ -51,13 +74,9 @@ export default function NavBar({ login, logout, userInfo }: NavBarProps) {
                 lastName: response.profileObj.familyName,
                 email: response.profileObj.email,
                 imageUrl: response.profileObj.imageUrl,
-            })
-                .then(function (response) {
-                    console.log(response);
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+            }
+            const res = await axios.post('http://localhost:8080/user/login', newUser)
+
         } catch (error) {
             console.log(error)
         }
