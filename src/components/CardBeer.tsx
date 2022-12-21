@@ -40,10 +40,29 @@ export default function CardBeer({ id, name, description, imageUrl, userInfo }: 
         description = description.slice(0, MAX_LENGTH_DESCRIPTION) + "...";
     }
 
-    const addToFavoriteBeer = (beerId: number) => {
+    const deleteToFavoriteBeer = (beerIdInput: Number) => {
+        try {
+            axios.delete('http://localhost:8080/favorite/remove', {
+                data: {
+                    beerId: beerIdInput,
+                    userId: userId
+                }
+            })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const addToFavoriteBeer = (beerIdInput: number) => {
         try {
             axios.post('http://localhost:8080/favorite/add', {
-                beerId: beerId,
+                beerId: beerIdInput,
                 userId: userId
             })
                 .then(function (response) {
@@ -74,11 +93,16 @@ export default function CardBeer({ id, name, description, imageUrl, userInfo }: 
                 </Typography>
             </CardContent>
             <CardActions >
-                {(userInfo) && (
-                    <IconButton aria-label="add to favorites" style={{ color: "rgb(240,128,128)" }} onClick={() => addToFavoriteBeer(id)}>
+                {((userInfo) && true) ? (
+                    <IconButton aria-label="add to favorites" style={{ color: "rgb(240,128,128)" }} onClick={() => deleteToFavoriteBeer(id)}>
                         <FavoriteIcon />
                     </IconButton>
-                )}
+                )
+                    :
+                    (<IconButton aria-label="add to favorites" onClick={() => addToFavoriteBeer(id)}>
+                        <FavoriteIcon />
+                    </IconButton>)
+                }
                 {id != 0 ? (
                     <Link style={{ textDecoration: 'none' }} to={`/beer/${id}`}>
                         <Button size="small">อ่านเพิ่มเติม</Button>

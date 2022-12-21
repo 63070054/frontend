@@ -2,11 +2,13 @@ import Paper from '@mui/material/Paper';
 import Grid from "@mui/material/Grid"
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
+import axios from 'axios';
+import { gapi } from 'gapi-script';
 
 interface Ingredient {
     name: string;
@@ -29,6 +31,17 @@ interface userInfoProp {
 
 export default function BeerDetailScreen({ userInfo }: userInfoProp) {
 
+    const [userId, serUserId] = useState('')
+
+    useEffect(() => {
+        if (userInfo) {
+            const auth2 = gapi.auth2.getAuthInstance();
+            const googleId = auth2.currentUser.get().googleId
+            serUserId(googleId)
+        }
+    }, [])
+
+
     const [beer, setBeer] = useState<Beer>({
         id: 4,
         name: "เบียร์แมว",
@@ -44,7 +57,24 @@ export default function BeerDetailScreen({ userInfo }: userInfoProp) {
         }],
         methods: ['เอาช็อคโกแลตไปไก่', 'เอาไก่ไปต้ม', 'พร้อมรับประทาน']
     });
-    const deletebear = (id: number) => {
+    const deletebeer = (BeerIdInput: number) => {
+        try {
+            axios.delete('http://localhost:8080/favorite/remove', {
+                data: {
+                    beerId: BeerIdInput,
+                    userId: userId
+                }
+            })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        } catch (error) {
+            console.log(error)
+        }
+
 
     }
     return (
@@ -135,7 +165,7 @@ export default function BeerDetailScreen({ userInfo }: userInfoProp) {
                                             </Link>
                                         </Grid>
                                         <Grid item xs={3}>
-                                            <Button onClick={() => deletebear(beer.id)} variant="contained" style={{ float: "right" }}>Delete Beer</Button>
+                                            <Button onClick={() => deletebeer(beer.id)} variant="contained" style={{ float: "right" }}>Delete Beer</Button>
                                         </Grid>
                                     </Box>
                                 </Paper>
