@@ -7,7 +7,6 @@ import CardBeer from "../components/CardBeer";
 import { useState } from "react";
 import { SelectChangeEvent } from '@mui/material/Select';
 import { Link } from "react-router-dom";
-import { gapi } from 'gapi-script';
 
 interface Beer {
     id: number;

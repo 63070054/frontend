@@ -7,9 +7,11 @@ import TextField from '@mui/material/TextField';
 import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
+import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
 
 import CardBeer from '../components/CardBeer';
 import { useState, useEffect } from 'react';
+import { Alert } from '@mui/material';
 
 interface Ingredient {
     name: string;
@@ -31,8 +33,15 @@ export default function BeerCreateScreen({ isLogin }: IsLoginProp) {
     const [fileImage, setFileImage] = useState<File | null>(null)
     const [ingredients, setIngredients] = useState<Ingredient[]>([])
     const [methods, setMethods] = useState<string[]>([])
+    const [openSnackBar, setOpenSnackBar] = useState(false);
 
     if (!isLogin) navigate("/")
+
+
+    const handleClose = () => {
+        setOpenSnackBar(false);
+    };
+
 
     const handlerFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) return;
@@ -76,6 +85,12 @@ export default function BeerCreateScreen({ isLogin }: IsLoginProp) {
     }
 
     const submit = () => {
+        const isIngredientsEmpty = ingredients.some(ingredient => ingredient.name == '' || ingredient.quantity == 0 || ingredient.unit == '');
+        const isMethodsEmpty = methods.some(method => method == '');
+
+        if (!nameBeer || !ingredients || !imageUrl || !methods || isIngredientsEmpty || isMethodsEmpty) {
+            setOpenSnackBar(true)
+        }
         if (!fileImage) return;
         const API_KEY = '00002718d0f7d7ea69ee38b7ad9a6f15'
         const headers = {
@@ -98,7 +113,7 @@ export default function BeerCreateScreen({ isLogin }: IsLoginProp) {
 
 
     return (
-        <>Container
+        <>
             <Container maxWidth="sm" className="p-16">
                 <Grid container>
                     <Grid item xs={7} className="p-16">
@@ -212,6 +227,18 @@ export default function BeerCreateScreen({ isLogin }: IsLoginProp) {
                             <Button variant="contained" onClick={submit} color="success">
                                 ยืนยันการสร้างเบียร์
                             </Button>
+                            <Snackbar
+
+                                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                                open={openSnackBar}
+                                onClose={handleClose}
+                                message="I love snacks"
+
+                            >
+                                <Alert onClose={handleClose} severity="warning" sx={{ width: '100%' }}>
+                                    กรุณากรอกข้อมูลให้ครบถ้วน
+                                </Alert>
+                            </Snackbar>
                         </Stack>
                     </Grid>
                 </Grid>

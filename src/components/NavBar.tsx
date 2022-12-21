@@ -42,25 +42,25 @@ export default function NavBar({ login, logout, isLogin }: NavBarProps) {
 
     const handleGoogleLoginSuccess = (response: any) => {
         login();
-
-        // try {
-        //     axios.post('http://localhost:8080/user', {
-        //         favorite: [],
-        //         owner: [],
-        //         firsrtName: response.profileObj.givenName,
-        //         lastName: response.profileObj.familyName,
-        //         imageUrl: response.profileObj.imageUrl,
-        //         email: response.profileObj.email
-        //     })
-        //         .then(function (response) {
-        //             console.log(response);
-        //         })
-        //         .catch(function (error) {
-        //             console.log(error);
-        //         });
-        // } catch (error) {
-        //     console.log(error)
-        // }
+        try {
+            axios.post('http://localhost:8080/user/login', {
+                googleId: response.googleId,
+                favorite: [],
+                owner: [],
+                firstName: response.profileObj.givenName,
+                lastName: response.profileObj.familyName,
+                email: response.profileObj.email,
+                imageUrl: response.profileObj.imageUrl,
+            })
+                .then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+        } catch (error) {
+            console.log(error)
+        }
 
     }
 

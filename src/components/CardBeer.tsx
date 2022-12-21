@@ -7,9 +7,6 @@ import Typography from '@mui/material/Typography';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import IconButton from '@mui/material/IconButton';
 import { Link } from 'react-router-dom';
-import { gapi } from 'gapi-script';
-import { useState, useEffect } from 'react'
-
 interface BeerProps {
     id: number;
     name: string;
@@ -19,6 +16,7 @@ interface BeerProps {
 }
 
 export default function CardBeer({ id, name, description, imageUrl, isLogin }: BeerProps) {
+
 
     const MAX_LENGTH_DESCRIPTION = 30
 
@@ -31,7 +29,7 @@ export default function CardBeer({ id, name, description, imageUrl, isLogin }: B
     }
 
     return (
-        <Card sx={{ maxWidth: 345 }} className="center-y">
+        <Card sx={{ maxWidth: 345 }} className="center-y" >
             <CardMedia
                 component="img"
                 height="140"
@@ -46,8 +44,8 @@ export default function CardBeer({ id, name, description, imageUrl, isLogin }: B
                     {description}
                 </Typography>
             </CardContent>
-            <CardActions>
-                {isLogin && (
+            <CardActions >
+                {(isLogin) && (
                     <IconButton aria-label="add to favorites" onClick={() => addToFavoriteBeer("3")}>
                         <FavoriteIcon />
                     </IconButton>
