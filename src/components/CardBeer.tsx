@@ -74,21 +74,25 @@ export default function CardBeer({ id, name, description, imageUrl, isLogin }: B
                 </Typography>
             </CardContent>
             <CardActions >
-                {(isLogin) && (
-                    <IconButton aria-label="add to favorites" style={{ color: "rgb(240,128,128)" }} onClick={() => addToFavoriteBeer(id)}>
-                        <FavoriteIcon />
-                    </IconButton>
-                )}
-                {id != "0" ? (
-                    <Link style={{ textDecoration: 'none' }} to={`/beer/${id}`}>
+                {
+                    (isLogin) && (
+                        <IconButton aria-label="add to favorites" style={{ color: "rgb(240,128,128)" }} onClick={() => addToFavoriteBeer(id)}>
+                            <FavoriteIcon />
+                        </IconButton>
+                    )
+                }
+                {
+                    id != "0" ? (
+                        <Link style={{ textDecoration: 'none' }} to={`/beer/${id}`}>
+                            <Button size="small">อ่านเพิ่มเติม</Button>
+                        </Link>
+                    ) : (
                         <Button size="small">อ่านเพิ่มเติม</Button>
-                    </Link>
-                ) : (
-                    <Button size="small">อ่านเพิ่มเติม</Button>
-                )}
+                    )
+                }
 
 
-            </CardActions>
-        </Card>
+            </CardActions >
+        </Card >
     );
 }
