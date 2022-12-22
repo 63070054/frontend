@@ -208,7 +208,7 @@ export default function BeerEditScreen({ userInfo, fetchUserInfo }: userInfoProp
                     <Grid item xs={7} className="p-16">
                         <Stack spacing={2}>
                             <Typography variant='h3'>
-                                Create Beer
+                                Edit Beer
                             </Typography>
                             <Button variant="contained" component="label">
                                 อัพโหลดรูปภาพเบียร์
@@ -332,7 +332,7 @@ export default function BeerEditScreen({ userInfo, fetchUserInfo }: userInfoProp
                             ))}
 
                             <Button variant="contained" onClick={submit} color="success">
-                                ยืนยันการสร้างเบียร์
+                                ยืนยันการแก้ไขเบียร์
                             </Button>
                             <Snackbar
 

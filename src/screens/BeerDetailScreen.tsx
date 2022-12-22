@@ -53,12 +53,10 @@ export default function BeerDetailScreen({ userInfo, fetchUserInfo }: userInfoPr
     const [beer, setBeer] = useState<Beer | null>(null);
     const deleteBeer = (beerId: string) => {
         if (userInfo) {
-            const auth2 = gapi.auth2.getAuthInstance();
-            const googleId = auth2.currentUser.get().googleId;
-            axios.delete("", {
+            axios.delete("http://localhost:8080/beers", {
                 data: {
                     "beerId": beerId,
-                    "userId": googleId
+                    "userId": userInfo.googleId
                 }
             }).then(result => {
                 fetchUserInfo()
@@ -82,14 +80,16 @@ export default function BeerDetailScreen({ userInfo, fetchUserInfo }: userInfoPr
             {beer && (
                 <Container maxWidth="sm" className="p-16">
                     <Grid container spacing={2}>
-                        <Grid item xs={12} style={{ position: 'relative' }}>
-                            <img src={beer.imageUrl} className='cover-image' alt="รูปภาพเบียร์"></img>
-                            <Typography variant="h3" className='center-offset'>
+                        <Grid item xs={12}>
+                            <Typography variant="h3">
                                 {beer.name}
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
-                            <Paper className="p-16" >
+                            <img src={beer.imageUrl} className='cover-image' alt="รูปภาพเบียร์"></img>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Paper className="p-16" elevation={2}>
                                 <Typography variant="h5">
                                     รายละเอียด
                                 </Typography>
@@ -102,7 +102,7 @@ export default function BeerDetailScreen({ userInfo, fetchUserInfo }: userInfoPr
                             </Paper>
                         </Grid>
                         <Grid item xs={12}>
-                            <Paper className="p-16">
+                            <Paper className="p-16" elevation={2}>
                                 <Typography variant="h5">
                                     ส่วนผสม
                                 </Typography>
@@ -144,7 +144,7 @@ export default function BeerDetailScreen({ userInfo, fetchUserInfo }: userInfoPr
                             </Paper>
                         </Grid>
                         <Grid item xs={12}>
-                            <Paper className="p-16">
+                            <Paper className="p-16" elevation={2}>
                                 <Typography variant="h5">
                                     ขั้นตอนการทำ
                                 </Typography>

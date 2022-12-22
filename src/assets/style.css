@@ -80,7 +80,6 @@
     object-fit: contain;
     object-position: top center;
     background-color: black;
-    opacity: 0.2;
 }
 
 .center-offset {
