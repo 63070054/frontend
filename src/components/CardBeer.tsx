@@ -97,14 +97,14 @@ export default function CardBeer({ _id, name, description, imageUrl, isLogin, us
 
         if (!userInfo || (userInfo.favorite.every(beer => beer._id != _id))) {
             return (
-                <IconButton aria-label="add to favorites" onClick={() => addToFavoriteBeer(_id)}>
+                <IconButton aria-label="add to favorites" style={{ color: "gray" }} onClick={() => addToFavoriteBeer(_id)}>
                     <FavoriteIcon />
                 </IconButton>
             )
         }
 
         return (
-            <IconButton aria-label="remove to favorites" style={{ color: "	rgb(240,128,128)" }} onClick={() => removeToFavoriteBeer(_id)}>
+            <IconButton aria-label="remove to favorites" style={{ color: "rgb(209 54 85)" }} onClick={() => removeToFavoriteBeer(_id)}>
                 <FavoriteIcon />
             </IconButton>
         )

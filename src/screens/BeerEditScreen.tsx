@@ -85,6 +85,7 @@ export default function BeerEditScreen({ userInfo, fetchUserInfo }: userInfoProp
     };
     const handleClosesuccess = () => {
         setOpenSnackBarSuccess(false);
+        navigate("/beer/" + beerId)
     };
 
     const handlerFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -186,7 +187,6 @@ export default function BeerEditScreen({ userInfo, fetchUserInfo }: userInfoProp
             }).then(function (response) {
                 setOpenSnackBarSuccess(true)
                 fetchUserInfo()
-                navigate("/")
             }).catch(function (error) {
                 console.log(error);
             }).finally(() => {
@@ -207,7 +207,7 @@ export default function BeerEditScreen({ userInfo, fetchUserInfo }: userInfoProp
                 <Grid container>
                     <Grid item xs={7} className="p-16">
                         <Stack spacing={2}>
-                            <Typography variant='h3'>
+                            <Typography variant='h3' style={{ color: "#e3a13e" }}>
                                 Edit Beer
                             </Typography>
                             <Button variant="contained" component="label">
@@ -352,7 +352,7 @@ export default function BeerEditScreen({ userInfo, fetchUserInfo }: userInfoProp
                                 onClose={handleClosesuccess}
                             >
                                 <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                                    สร้างสูตรเบียร์สำเร็จ
+                                    แก้ไขสูตรเบียร์สำเร็จ
                                 </Alert>
                             </Snackbar>
                         </Stack>

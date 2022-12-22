@@ -69,6 +69,7 @@ export default function BeerCreateScreen({ userInfo, fetchUserInfo }: userInfoPr
     };
     const handleClosesuccess = () => {
         setOpenSnackBarSuccess(false);
+        navigate("/")
     };
 
     const handlerFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -156,12 +157,11 @@ export default function BeerCreateScreen({ userInfo, fetchUserInfo }: userInfoPr
                     .then(function (response) {
                         setOpenSnackBarSuccess(true)
                         fetchUserInfo()
-                        navigate("/")
                     })
                     .catch(function (error) {
                         console.log(error);
                     }).finally(() => {
-                        setIsLoading(true)
+                        setIsLoading(false)
                     });
             })
         }
@@ -181,7 +181,7 @@ export default function BeerCreateScreen({ userInfo, fetchUserInfo }: userInfoPr
                 <Grid container>
                     <Grid item xs={7} className="p-16">
                         <Stack spacing={2}>
-                            <Typography variant='h3'>
+                            <Typography variant='h3' style={{ color: "#e3a13e" }}>
                                 Create Beer
                             </Typography>
                             <Button variant="contained" component="label">

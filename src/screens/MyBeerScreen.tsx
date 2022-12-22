@@ -69,7 +69,7 @@ export default function MyBeerScreen({ userInfo, fetchUserInfo }: userInfoProp) 
                     <Box display="flex" alignItems="center">
                         <Typography variant="h3">My Beers</Typography>
                         <Link to="/createBeer" style={{ marginLeft: 10, textDecoration: 'none' }}>
-                            <Button variant="contained">
+                            <Button variant="contained" style={{ background: "#e3a13e" }}>
                                 Create Beer
                             </Button>
                         </Link>

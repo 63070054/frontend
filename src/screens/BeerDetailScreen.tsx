@@ -54,6 +54,7 @@ export default function BeerDetailScreen({ userInfo, fetchUserInfo }: userInfoPr
     const navigate = useNavigate()
     const handleClose = () => {
         setOpenSnackBar(false);
+        navigate("/")
     };
     const [beer, setBeer] = useState<Beer | null>(null);
     const deleteBeer = (beerId: string) => {
@@ -64,10 +65,8 @@ export default function BeerDetailScreen({ userInfo, fetchUserInfo }: userInfoPr
                     "userId": userInfo.googleId
                 }
             }).then(result => {
-
                 setOpenSnackBar(true)
                 fetchUserInfo()
-                navigate("/")
 
             })
 
@@ -170,16 +169,15 @@ export default function BeerDetailScreen({ userInfo, fetchUserInfo }: userInfoPr
                         {
                             (userInfo && userInfo.owner.some(beer => beer._id == beerId)) && (
                                 <Grid item xs={12}>
-                                    <Paper className="p-16">
+                                    <Paper className="p-16" elevation={2}>
                                         <Box style={{ display: 'flex', width: '100%' }}>
-
                                             <Grid item xs={6}>
                                                 <Link to={`/editBeer/${beer._id}`}>
-                                                    <Button variant="contained" style={{ float: "right" }}>Edit Beer</Button>
+                                                    <Button variant="contained" style={{ float: "right", marginRight: 10 }}>Edit Beer</Button>
                                                 </Link>
                                             </Grid>
                                             <Grid item xs={3}>
-                                                <Button onClick={() => deleteBeer(beer._id)} variant="contained" style={{ float: "right", backgroundColor: "	rgb(240, 128, 128)" }}>Delete Beer</Button>
+                                                <Button onClick={() => deleteBeer(beer._id)} variant="contained" style={{ float: "right", backgroundColor: "rgb(255 41 84)" }}>Delete Beer</Button>
                                             </Grid>
                                         </Box>
                                     </Paper>
