@@ -21,6 +21,7 @@ import { GoogleLogout } from 'react-google-login';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { Avatar } from '@mui/material';
+import LoadingBackDrop from './LoadingBackDrop';
 
 interface NavBarProps {
     login: (a: User) => void;
@@ -57,6 +58,7 @@ export default function NavBar({ login, logout, userInfo }: NavBarProps) {
 
     const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
     const clientID = "971797688819-5osp62f7rkgko6ul3uvdja8k8q9jg80p.apps.googleusercontent.com"
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     const handleProfileMenuOpen = () => {
         setIsMenuOpen(true)
     };
@@ -66,7 +68,7 @@ export default function NavBar({ login, logout, userInfo }: NavBarProps) {
     };
 
     const handleGoogleLoginSuccess = async (response: any) => {
-
+        setIsLoading(true)
         const newUser = {
             googleId: response.googleId,
             favorite: [],
@@ -79,6 +81,7 @@ export default function NavBar({ login, logout, userInfo }: NavBarProps) {
         await axios.post('http://localhost:8080/user/login', newUser)
         const userInfo = await axios.get("http://localhost:8080/user/" + response.googleId)
         login(userInfo.data)
+        setIsLoading(false)
 
     }
 
@@ -191,6 +194,7 @@ export default function NavBar({ login, logout, userInfo }: NavBarProps) {
                 {renderMenu}
             </Box>
             <Outlet />
+            <LoadingBackDrop isLoading={isLoading} />
         </>
     );
 }
