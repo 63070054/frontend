@@ -85,10 +85,10 @@ export default function FavoriteBeerScreen({ userInfo, fetchUserInfo }: userInfo
         <>
             {beers && (
                 <Container maxWidth="sm" className="p-16">
-                    <Typography variant="h3">My Favorite Beers</Typography>
+                    <Typography variant="h3" style={{ color: "#e3a13e" }}>My Favorite Beers</Typography>
                     <Grid container spacing={2} className="pt-16">
                         {beers.map((beer, index) => (
-                            <Grid item xs={4} key={index}>
+                            <Grid item xs={6} sm={4} key={index}>
                                 <CardBeer _id={beer._id} userId={beer.userId} name={beer.name} description={beer.description} imageUrl={beer.imageUrl} isLogin={isLogin} userInfo={userInfo} fetchUserInfo={fetchUserInfo} />
                             </Grid>
                         ))}

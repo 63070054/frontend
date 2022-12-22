@@ -110,6 +110,9 @@ function App() {
     palette: {
       mode: "dark",
     },
+    typography: {
+      fontFamily: "Prompt, sans-serif"
+    }
   });
 
   return (

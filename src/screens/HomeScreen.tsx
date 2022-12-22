@@ -46,7 +46,6 @@ export default function HomeScreen({ userInfo, fetchUserInfo }: userInfoProp) {
     const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
     const [beers, setBeers] = useState<Beer[]>([])
     const [ingredients, setIngredients] = useState<string[]>([]);
-    const [filterIngredient, setFilterIngredient] = useState<string>("")
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleSelectIngredientsChange = (event: SelectChangeEvent<typeof selectedIngredients>) => {
@@ -89,11 +88,6 @@ export default function HomeScreen({ userInfo, fetchUserInfo }: userInfoProp) {
         setQueryBeer(text);
     };
 
-    const handleFilterIngredient = (text: string) => {
-        console.log(text)
-        setFilterIngredient(text)
-    }
-
     let filterBeers = beers.filter((beer) => beer.name.includes(queryBeer));
 
     if (selectedIngredients.length > 0) {
@@ -105,8 +99,6 @@ export default function HomeScreen({ userInfo, fetchUserInfo }: userInfoProp) {
             );
         });
     }
-
-    let filterIngredients = ingredients.filter(ingredient => ingredient.includes(filterIngredient));
 
     let isLogin = false;
     if (userInfo) {
@@ -127,9 +119,7 @@ export default function HomeScreen({ userInfo, fetchUserInfo }: userInfoProp) {
                         <SelectFilterIngredients
                             selectedIngredients={selectedIngredients}
                             handleSelectIngredientsChange={handleSelectIngredientsChange}
-                            ingredients={filterIngredients}
-                            handleFilterIngredient={handleFilterIngredient}
-                            filterIngredient={filterIngredient}
+                            ingredients={ingredients}
                         />
                     </Grid>
                     {isLogin && (
@@ -146,7 +136,7 @@ export default function HomeScreen({ userInfo, fetchUserInfo }: userInfoProp) {
             <Container maxWidth="sm" className="p-n-t-16 p-0">
                 <Grid container spacing={2}>
                     {filterBeers.map((beer, index) => (
-                        <Grid item xs={4} key={index}>
+                        <Grid item xs={6} sm={4} key={index}>
                             <CardBeer
                                 _id={beer._id}
                                 name={beer.name}

@@ -67,9 +67,9 @@ export default function MyBeerScreen({ userInfo, fetchUserInfo }: userInfoProp) 
             {beers && (
                 <Container maxWidth="sm" className="p-16">
                     <Box display="flex" alignItems="center">
-                        <Typography variant="h3">My Beers</Typography>
+                        <Typography variant="h3" style={{ color: "#e3a13e" }}>My Beers</Typography>
                         <Link to="/createBeer" style={{ marginLeft: 10, textDecoration: 'none' }}>
-                            <Button variant="contained" style={{ background: "#e3a13e" }}>
+                            <Button variant="contained">
                                 Create Beer
                             </Button>
                         </Link>
@@ -77,7 +77,7 @@ export default function MyBeerScreen({ userInfo, fetchUserInfo }: userInfoProp) 
 
                     <Grid container spacing={2} className="pt-16">
                         {beers.map((beer, index) => (
-                            <Grid item xs={4} key={index}>
+                            <Grid item xs={6} sm={4} key={index}>
                                 <CardBeer _id={beer._id} userId={beer.userId} name={beer.name} description={beer.description} imageUrl={beer.imageUrl} isLogin={isLogin} userInfo={userInfo} fetchUserInfo={fetchUserInfo} />
                             </Grid>
                         ))}

@@ -133,6 +133,9 @@ export default function BeerCreateScreen({ userInfo, fetchUserInfo }: userInfoPr
         }
         else {
 
+            setIsLoading(true)
+
+
             const API_KEY = '00002718d0f7d7ea69ee38b7ad9a6f15'
             const headers = {
                 'content-type': 'multipart/form-data'
@@ -143,7 +146,6 @@ export default function BeerCreateScreen({ userInfo, fetchUserInfo }: userInfoPr
             axios.post("https://thumbsnap.com/api/upload", formData, {
                 headers
             }).then(result => {
-                setIsLoading(true)
                 const auth2 = gapi.auth2.getAuthInstance();
                 const googleId = auth2.currentUser.get().googleId;
                 axios.post('http://localhost:8080/beers', {
@@ -325,7 +327,7 @@ export default function BeerCreateScreen({ userInfo, fetchUserInfo }: userInfoPr
                                 open={openSnackBarSuccess}
                                 onClose={handleClosesuccess}
                             >
-                                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                                <Alert onClose={handleClosesuccess} severity="success" sx={{ width: '100%' }}>
                                     สร้างสูตรเบียร์สำเร็จ
                                 </Alert>
                             </Snackbar>

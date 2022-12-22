@@ -351,7 +351,7 @@ export default function BeerEditScreen({ userInfo, fetchUserInfo }: userInfoProp
                                 open={openSnackBarSuccess}
                                 onClose={handleClosesuccess}
                             >
-                                <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                                <Alert onClose={handleClosesuccess} severity="success" sx={{ width: '100%' }}>
                                     แก้ไขสูตรเบียร์สำเร็จ
                                 </Alert>
                             </Snackbar>

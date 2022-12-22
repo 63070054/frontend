@@ -24,11 +24,9 @@ interface SelectFilterIngredientsProps {
     selectedIngredients: string[];
     handleSelectIngredientsChange: (a: any) => void;
     ingredients: string[];
-    handleFilterIngredient: (a: string) => void;
-    filterIngredient: string;
 }
 
-export default function SelectFilterIngredients({ selectedIngredients, handleSelectIngredientsChange, ingredients, handleFilterIngredient, filterIngredient }: SelectFilterIngredientsProps) {
+export default function SelectFilterIngredients({ selectedIngredients, handleSelectIngredientsChange, ingredients }: SelectFilterIngredientsProps) {
 
     return (
         <FormControl sx={{ m: 1, width: 300 }} className="width-100 p-0 m-0">
@@ -56,17 +54,6 @@ export default function SelectFilterIngredients({ selectedIngredients, handleSel
                 }}
                 MenuProps={MenuProps}
             >
-                <MenuItem>
-                    <TextField
-                        multiline
-                        minRows={1}
-                        label="ชื่อวัตถุดิบ"
-                        fullWidth
-                        value={filterIngredient}
-                        variant="filled"
-                        onChange={(e) => handleFilterIngredient(e.target.value)}
-                    />
-                </MenuItem>
                 {ingredients.map((ingredient, index) => (
                     <MenuItem key={index} value={ingredient}>
                         <Checkbox checked={selectedIngredients.indexOf(ingredient) > -1} />

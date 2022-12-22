@@ -88,7 +88,7 @@ export default function BeerDetailScreen({ userInfo, fetchUserInfo }: userInfoPr
                 <Container maxWidth="sm" className="p-16">
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Typography variant="h3">
+                            <Typography variant="h3" style={{ color: "#e3a13e" }}>
                                 {beer.name}
                             </Typography>
                         </Grid>
@@ -177,7 +177,7 @@ export default function BeerDetailScreen({ userInfo, fetchUserInfo }: userInfoPr
                                                 </Link>
                                             </Grid>
                                             <Grid item xs={3}>
-                                                <Button onClick={() => deleteBeer(beer._id)} variant="contained" style={{ float: "right", backgroundColor: "rgb(255 41 84)" }}>Delete Beer</Button>
+                                                <Button onClick={() => deleteBeer(beer._id)} variant="contained" style={{ float: "right", backgroundColor: "rgb(255 101 132)" }}>Delete Beer</Button>
                                             </Grid>
                                         </Box>
                                     </Paper>
