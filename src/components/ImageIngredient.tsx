@@ -12,7 +12,7 @@ export default function ImageIngredient({ name }: ImageIngredientProp) {
 
     useEffect(() => {
         if (ingredientName != "") {
-            axios.get("http://localhost:8080/image/ingerdient/" + ingredientName).then(result => {
+            axios.get("http://localhost:8080/image/ingredient/" + ingredientName).then(result => {
                 console.log(result)
                 setImageIngredient(result.data)
             })
