@@ -11,6 +11,8 @@ import axios from 'axios';
 import { gapi } from 'gapi-script';
 import { useParams, useNavigate } from 'react-router-dom';
 import ImageIngredient from '../components/ImageIngredient';
+import Snackbar from "@mui/material/Snackbar";
+import { Alert } from "@mui/material";
 
 interface Ingredient {
     name: string;
@@ -47,9 +49,12 @@ export default function BeerDetailScreen({ userInfo, fetchUserInfo }: userInfoPr
 
     const params = useParams()
     const beerId = params.id
+    const [openSnackBar, setOpenSnackBar] = useState(false);
 
     const navigate = useNavigate()
-
+    const handleClose = () => {
+        setOpenSnackBar(false);
+    };
     const [beer, setBeer] = useState<Beer | null>(null);
     const deleteBeer = (beerId: string) => {
         if (userInfo) {
@@ -59,8 +64,11 @@ export default function BeerDetailScreen({ userInfo, fetchUserInfo }: userInfoPr
                     "userId": userInfo.googleId
                 }
             }).then(result => {
+
+                setOpenSnackBar(true)
                 fetchUserInfo()
                 navigate("/")
+
             })
 
         }
@@ -181,6 +189,16 @@ export default function BeerDetailScreen({ userInfo, fetchUserInfo }: userInfoPr
 
 
                     </Grid>
+                    <Snackbar
+                        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                        open={openSnackBar}
+                        onClose={handleClose}
+
+                    >
+                        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+                            ลบเบียร์สำเร็จแล้ว
+                        </Alert>
+                    </Snackbar>
                 </Container>
             )
             }
