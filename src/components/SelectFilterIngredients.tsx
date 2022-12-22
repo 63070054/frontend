@@ -6,6 +6,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import Chip from '@mui/material/Chip';
 import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
 
 
 const ITEM_HEIGHT = 48;
@@ -19,18 +20,16 @@ const MenuProps = {
     },
 };
 
-const ingredients = [
-    'ไก่',
-    'กาว',
-    'เป็ด'
-];
-
 interface SelectFilterIngredientsProps {
     selectedIngredients: string[];
     handleSelectIngredientsChange: (a: any) => void;
+    ingredients: string[];
+    handleFilterIngredient: (a: string) => void;
+    filterIngredient: string;
 }
 
-export default function SelectFilterIngredients({ selectedIngredients, handleSelectIngredientsChange }: SelectFilterIngredientsProps) {
+export default function SelectFilterIngredients({ selectedIngredients, handleSelectIngredientsChange, ingredients, handleFilterIngredient, filterIngredient }: SelectFilterIngredientsProps) {
+
     return (
         <FormControl sx={{ m: 1, width: 300 }} className="width-100 p-0 m-0">
             <Select
@@ -57,8 +56,16 @@ export default function SelectFilterIngredients({ selectedIngredients, handleSel
                 }}
                 MenuProps={MenuProps}
             >
-                <MenuItem disabled value="">
-                    <em>Placeholder</em>
+                <MenuItem>
+                    <TextField
+                        multiline
+                        minRows={1}
+                        label="ชื่อวัตถุดิบ"
+                        fullWidth
+                        value={filterIngredient}
+                        variant="filled"
+                        onChange={(e) => handleFilterIngredient(e.target.value)}
+                    />
                 </MenuItem>
                 {ingredients.map((ingredient, index) => (
                     <MenuItem key={index} value={ingredient}>

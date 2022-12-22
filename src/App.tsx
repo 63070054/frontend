@@ -14,7 +14,9 @@ import NavBar from "./components/NavBar";
 import { useState } from "react";
 import MyBeerScreen from "./screens/MyBeerScreen";
 import FavoriteBeerScreen from "./screens/FavoriteBeerScreen";
-// import BeerEditScreen from './screens/BeerEditScreen';
+import BeerEditScreen from './screens/BeerEditScreen';
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 interface Ingredient {
   name: string;
   quantity: number;
@@ -47,11 +49,21 @@ function App() {
   const [userInfo, setuserInfo] = useState<User | null>(null);
 
   const login = (userInfo: User) => {
-    setuserInfo(userInfo);
+    setuserInfo({ ...userInfo });
   }
 
   const logout = () => {
     setuserInfo(null);
+    window.location.replace("http://localhost:3000")
+
+  }
+
+  const fetchUserInfo = () => {
+    if (userInfo) {
+      axios.get("http://localhost:8080/user/" + userInfo?.googleId).then(result => {
+        setuserInfo({ ...result.data })
+      })
+    }
   }
 
   useEffect(() => {
@@ -71,28 +83,28 @@ function App() {
       children: [
         {
           path: "/",
-          element: <HomeScreen userInfo={userInfo} />,
+          element: <HomeScreen userInfo={userInfo} fetchUserInfo={fetchUserInfo} />,
         },
         {
           path: "/createBeer",
-          element: <BeerCreateScreen userInfo={userInfo} />,
+          element: <BeerCreateScreen userInfo={userInfo} fetchUserInfo={fetchUserInfo} />,
         },
         {
           path: "/beer/:id",
-          element: <BeerDetailScreen userInfo={userInfo} />,
+          element: <BeerDetailScreen userInfo={userInfo} fetchUserInfo={fetchUserInfo} />,
         },
         {
           path: "/favoriteBeers",
-          element: <FavoriteBeerScreen userInfo={userInfo} />,
+          element: <FavoriteBeerScreen userInfo={userInfo} fetchUserInfo={fetchUserInfo} />,
         },
         {
           path: "/myBeers",
-          element: <MyBeerScreen userInfo={userInfo} />,
+          element: <MyBeerScreen userInfo={userInfo} fetchUserInfo={fetchUserInfo} />,
         },
-        // {
-        //   path: "/editBeer/:id",
-        //   element: <BeerEditScreen userInfo={userInfo} />,
-        // }
+        {
+          path: "/editBeer/:id",
+          element: <BeerEditScreen userInfo={userInfo} fetchUserInfo={fetchUserInfo} />,
+        }
       ],
     },
   ]);

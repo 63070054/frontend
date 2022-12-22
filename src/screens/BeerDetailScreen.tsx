@@ -5,15 +5,17 @@ import Typography from '@mui/material/Typography';
 import { useState, useEffect } from 'react';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import axios from 'axios';
 import { gapi } from 'gapi-script';
+import { useParams, useNavigate } from 'react-router-dom';
+import ImageIngredient from '../components/ImageIngredient';
 
 interface Ingredient {
-  name: string;
-  quantity: number;
-  unit: string;
+    name: string;
+    quantity: number;
+    unit: string;
 }
 interface Beer {
     _id: string;
@@ -37,22 +39,51 @@ interface User {
 
 interface userInfoProp {
     userInfo: User | null;
+    fetchUserInfo: () => void;
 
 }
 
-export default function BeerDetailScreen({ userInfo }: userInfoProp) {
+export default function BeerDetailScreen({ userInfo, fetchUserInfo }: userInfoProp) {
+
+    const params = useParams()
+    const beerId = params.id
+
+    const navigate = useNavigate()
 
     const [beer, setBeer] = useState<Beer | null>(null);
     const deleteBeer = (beerId: string) => {
+        if (userInfo) {
+            const auth2 = gapi.auth2.getAuthInstance();
+            const googleId = auth2.currentUser.get().googleId;
+            axios.delete("", {
+                data: {
+                    "beerId": beerId,
+                    "userId": googleId
+                }
+            }).then(result => {
+                fetchUserInfo()
+                navigate("/")
+            })
 
+        }
     }
+
+    useEffect(() => {
+        axios.get("http://localhost:8080/beers/" + beerId).then((result: any) => {
+            setBeer({ ...result.data })
+        }).catch(err => {
+            navigate("/")
+        })
+
+    }, [])
+
     return (
         <>
             {beer && (
                 <Container maxWidth="sm" className="p-16">
                     <Grid container spacing={2}>
                         <Grid item xs={12} style={{ position: 'relative' }}>
-                            <img src="https://media.istockphoto.com/id/1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w=" className='cover-image' alt="รูปภาพเบียร์"></img>
+                            <img src={beer.imageUrl} className='cover-image' alt="รูปภาพเบียร์"></img>
                             <Typography variant="h3" className='center-offset'>
                                 {beer.name}
                             </Typography>
@@ -78,8 +109,13 @@ export default function BeerDetailScreen({ userInfo }: userInfoProp) {
                                 <Stack spacing={1}>
                                     {beer.ingredients.map(ingredient => (
                                         <Box style={{ display: 'flex', width: '100%' }}>
-                                            <Grid container spacing={2}>
-                                                <Grid item xs={8}>
+                                            <Grid container spacing={2} alignItems="center">
+                                                <Grid item xs={2}>
+                                                    <Paper className="p-8" elevation={4} style={{ alignItems: "center", display: "flex" }}>
+                                                        <ImageIngredient name={ingredient.name} />
+                                                    </Paper>
+                                                </Grid>
+                                                <Grid item xs={6}>
                                                     <Paper className="p-16" elevation={4}>
                                                         <Typography variant="subtitle2">
                                                             {ingredient.name}
@@ -124,7 +160,7 @@ export default function BeerDetailScreen({ userInfo }: userInfoProp) {
                             </Paper>
                         </Grid>
                         {
-                            userInfo && (
+                            (userInfo && userInfo.owner.some(beer => beer._id == beerId)) && (
                                 <Grid item xs={12}>
                                     <Paper className="p-16">
                                         <Box style={{ display: 'flex', width: '100%' }}>
@@ -135,7 +171,7 @@ export default function BeerDetailScreen({ userInfo }: userInfoProp) {
                                                 </Link>
                                             </Grid>
                                             <Grid item xs={3}>
-                                                <Button onClick={() => deleteBeer(beer._id)} variant="contained" style={{ float: "right" }}>Delete Beer</Button>
+                                                <Button onClick={() => deleteBeer(beer._id)} variant="contained" style={{ float: "right", backgroundColor: "	rgb(240, 128, 128)" }}>Delete Beer</Button>
                                             </Grid>
                                         </Box>
                                     </Paper>
@@ -146,7 +182,8 @@ export default function BeerDetailScreen({ userInfo }: userInfoProp) {
 
                     </Grid>
                 </Container>
-            )}
+            )
+            }
         </>
     )
 }

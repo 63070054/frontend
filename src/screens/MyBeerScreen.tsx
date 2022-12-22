@@ -1,12 +1,16 @@
 import Container from "@mui/system/Container"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Grid from "@mui/material/Grid"
 import CardBeer from "../components/CardBeer";
 import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router";
+import { Link } from 'react-router-dom';
+import Button from '@mui/material/Button';
+import { Box } from "@mui/material";
 
 interface userInfoProp {
     userInfo: User | null;
+    fetchUserInfo: () => void;
 }
 
 interface Ingredient {
@@ -34,18 +38,27 @@ interface User {
     imageUrl: string;
 }
 
-export default function MyBeerScreen({ isLogin }: IsLoginProp) {
+export default function MyBeerScreen({ userInfo, fetchUserInfo }: userInfoProp) {
 
     const navigate = useNavigate()
 
 
-    const [beers, setBeers] = useState<Beer[]>([]);
-
-    if (!isLogin) navigate("/")
+    useEffect(() => {
+        if (!userInfo) {
+            navigate("/")
+        }
+    }, [])
 
     let isLogin = false;
     if (userInfo) {
         isLogin = true;
+    }
+
+    let beers = null;
+
+    if (userInfo) {
+        beers = userInfo.owner
+        beers.sort((a: Beer, b: Beer) => a.name.localeCompare(b.name))
     }
 
 
@@ -53,11 +66,19 @@ export default function MyBeerScreen({ isLogin }: IsLoginProp) {
         <>
             {beers && (
                 <Container maxWidth="sm" className="p-16">
-                    <Typography variant="h3">My Beers</Typography>
+                    <Box display="flex" alignItems="center">
+                        <Typography variant="h3">My Beers</Typography>
+                        <Link to="/createBeer" style={{ marginLeft: 10, textDecoration: 'none' }}>
+                            <Button variant="contained">
+                                Create Beer
+                            </Button>
+                        </Link>
+                    </Box>
+
                     <Grid container spacing={2} className="pt-16">
                         {beers.map((beer, index) => (
                             <Grid item xs={4} key={index}>
-                                <CardBeer id={beer._id} name={beer.name} description={beer.description} imageUrl={beer.imageUrl} isLogin={isLogin} />
+                                <CardBeer _id={beer._id} userId={beer.userId} name={beer.name} description={beer.description} imageUrl={beer.imageUrl} isLogin={isLogin} userInfo={userInfo} fetchUserInfo={fetchUserInfo} />
                             </Grid>
                         ))}
                     </Grid>

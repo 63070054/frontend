@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { SelectChangeEvent } from "@mui/material/Select";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import LoadingBackDrop from './../components/LoadingBackDrop';
 
 interface Ingredient {
     name: string;
@@ -36,16 +37,17 @@ interface User {
 
 interface userInfoProp {
     userInfo: User | null;
+    fetchUserInfo: () => void;
 }
 
-export default function HomeScreen({ isLogin }: IsLoginProp) {
-  const [queryBeer, setQueryBeer] = useState<string>("");
-  const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
-
-
+export default function HomeScreen({ userInfo, fetchUserInfo }: userInfoProp) {
 
     const [queryBeer, setQueryBeer] = useState<string>('')
     const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
+    const [beers, setBeers] = useState<Beer[]>([])
+    const [ingredients, setIngredients] = useState<string[]>([]);
+    const [filterIngredient, setFilterIngredient] = useState<string>("")
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleSelectIngredientsChange = (event: SelectChangeEvent<typeof selectedIngredients>) => {
         const {
@@ -56,19 +58,55 @@ export default function HomeScreen({ isLogin }: IsLoginProp) {
         );
     };
 
-    const [beers, setBeers] = useState<Beer[]>([]);
+    useEffect(() => {
+        async function fetchBeers() {
+            setIsLoading(true)
+            const ingredients: string[] = [];
+            axios.get("http://localhost:8080/beers").then((response) => {
+                const beers = response.data
+                beers.sort((a: Beer, b: Beer) => a.name.localeCompare(b.name))
+                setBeers([...beers]);
+                response.data.map((beer: Beer) => {
+                    beer.ingredients.map(ingredient => {
+                        if (!ingredients.includes(ingredient.name)) {
+                            ingredients.push(ingredient.name);
+                        }
+                    })
+                })
+                ingredients.sort((a, b) => a.localeCompare(b))
+                setIngredients([...ingredients])
+            }).catch(err => {
+                console.log(err)
+            }).finally(() => {
+                setIsLoading(false)
+            });
 
-    let filterBeers = beers.filter(beer => beer.name.includes(queryBeer) || beer.description.includes(queryBeer))
-
-    if (selectedIngredients.length > 0) {
-        filterBeers = beers.filter(beer => {
-            return selectedIngredients.some(selectedIngredient => beer.ingredients.some(beerIngredient => beerIngredient.name.includes(selectedIngredient)))
-        })
-    }
+        }
+        fetchBeers();
+    }, []);
 
     const handlerSearchBeer = (text: string) => {
-        setQueryBeer(text)
+        setQueryBeer(text);
+    };
+
+    const handleFilterIngredient = (text: string) => {
+        console.log(text)
+        setFilterIngredient(text)
     }
+
+    let filterBeers = beers.filter((beer) => beer.name.includes(queryBeer));
+
+    if (selectedIngredients.length > 0) {
+        filterBeers = beers.filter((beer) => {
+            return selectedIngredients.some((selectedIngredient) =>
+                beer.ingredients.some((beerIngredient) =>
+                    beerIngredient.name.includes(selectedIngredient)
+                )
+            );
+        });
+    }
+
+    let filterIngredients = ingredients.filter(ingredient => ingredient.includes(filterIngredient));
 
     let isLogin = false;
     if (userInfo) {
@@ -80,15 +118,26 @@ export default function HomeScreen({ isLogin }: IsLoginProp) {
             <Container maxWidth="sm" className="p-16">
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
-                        <SearchBeers queryBeer={queryBeer} handlerSearchBeer={handlerSearchBeer} />
+                        <SearchBeers
+                            queryBeer={queryBeer}
+                            handlerSearchBeer={handlerSearchBeer}
+                        />
                     </Grid>
                     <Grid item xs={12}>
-                        <SelectFilterIngredients selectedIngredients={selectedIngredients} handleSelectIngredientsChange={handleSelectIngredientsChange} />
+                        <SelectFilterIngredients
+                            selectedIngredients={selectedIngredients}
+                            handleSelectIngredientsChange={handleSelectIngredientsChange}
+                            ingredients={filterIngredients}
+                            handleFilterIngredient={handleFilterIngredient}
+                            filterIngredient={filterIngredient}
+                        />
                     </Grid>
-                    {userInfo && (
+                    {isLogin && (
                         <Grid item xs={12}>
                             <Link to="/createBeer">
-                                <Button variant="contained" style={{ float: "right" }}>Create Beer</Button>
+                                <Button variant="contained" style={{ float: "right" }}>
+                                    Create Beer
+                                </Button>
                             </Link>
                         </Grid>
                     )}
@@ -98,116 +147,21 @@ export default function HomeScreen({ isLogin }: IsLoginProp) {
                 <Grid container spacing={2}>
                     {filterBeers.map((beer, index) => (
                         <Grid item xs={4} key={index}>
-                            <CardBeer id={beer._id} name={beer.name} description={beer.description} imageUrl={beer.imageUrl} isLogin={isLogin} />
+                            <CardBeer
+                                _id={beer._id}
+                                name={beer.name}
+                                description={beer.description}
+                                imageUrl={beer.imageUrl}
+                                userId={beer.userId}
+                                isLogin={isLogin}
+                                userInfo={userInfo}
+                                fetchUserInfo={fetchUserInfo}
+                            />
                         </Grid>
                     ))}
                 </Grid>
             </Container>
+            <LoadingBackDrop isLoading={isLoading} />
         </>
     );
-  };
-
-  const [beers, setBeers] = useState<Beer[]>([
-    {
-      _id: "63a3597cc6491c394bce0364",
-      name: "เบียร์กาว",
-      description: "โคตรกาว",
-      ingredients: [
-        {
-          name: "งับ",
-          quantity: 10,
-          unit: "งับ",
-        },
-        {
-          name: "งับ",
-          quantity: 2,
-          unit: "งับ",
-        },
-      ],
-      methods: [
-        "งับ",
-        "Boil the wort with the hops for 60 minutes",
-        "Cool the wort and transfer to a fermenter",
-      ],
-      imageUrl: "งับ",
-      userId: "103000190698724848066",
-    },
-  ]);
-  useEffect(() => {
-    async function fetchBeers() {
-      try {
-        axios.get("http://localhost:8080/beers").then((response) => {
-          setBeers(response.data);
-          console.log(
-            "🚀 ~ file: HomeScreen.tsx:46 ~ axios.get ~ response",
-            response
-          );
-        });
-      } catch (e) {
-        console.log(e);
-      }
-    }
-    fetchBeers();
-  }, []);
-  let filterBeers = beers.filter((beer) => beer.name.includes(queryBeer));
-
-  if (selectedIngredients.length > 0) {
-    filterBeers = beers.filter((beer) => {
-      return selectedIngredients.some((selectedIngredient) =>
-        beer.ingredients.some((beerIngredient) =>
-          beerIngredient.name.includes(selectedIngredient)
-        )
-      );
-    });
-  }
-
-  const handlerSearchBeer = (text: string) => {
-    setQueryBeer(text);
-  };
-
-  return (
-    <>
-      <Container maxWidth="sm" className="p-16">
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <SearchBeers
-              queryBeer={queryBeer}
-              handlerSearchBeer={handlerSearchBeer}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <SelectFilterIngredients
-              selectedIngredients={selectedIngredients}
-              handleSelectIngredientsChange={handleSelectIngredientsChange}
-            />
-          </Grid>
-          {isLogin && (
-            <Grid item xs={12}>
-              <Link to="/createBeer">
-                <Button variant="contained" style={{ float: "right" }}>
-                  Create Beer
-                </Button>
-              </Link>
-            </Grid>
-          )}
-        </Grid>
-      </Container>
-      <Container maxWidth="sm" className="p-n-t-16 p-0">
-        <Grid container spacing={2}>
-          {filterBeers.map((beer, index) => (
-            <Grid item xs={4} key={index}>
-              <CardBeer
-                _id={beer._id}
-                name={beer.name}
-                description={beer.description}
-                imageUrl={beer.imageUrl}
-                userId={beer.userId}
-                isLogin={isLogin}
-              />
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
-    </>
-  );
 }

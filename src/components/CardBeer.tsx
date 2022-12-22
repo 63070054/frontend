@@ -18,22 +18,36 @@ interface BeerProps {
     imageUrl: string;
     userId: string;
     isLogin: boolean;
+    userInfo: User | null;
+    fetchUserInfo?: () => void;
 }
 
-export default function CardBeer({ _id, name, description, imageUrl, isLogin }: BeerProps) {
-    const [idUser, serIdUser] = useState('')
+interface Ingredient {
+    name: string;
+    quantity: number;
+    unit: string;
+}
+interface Beer {
+    _id: string;
+    name: string;
+    description: string;
+    ingredients: Ingredient[];
+    methods: string[];
+    imageUrl: string;
+    userId: string;
+}
 
-    // let profile = auth2.currentUser.get().getBasicProfile();
-    // seruserId(gapi.auth2.getAuthInstance().currentUser.get().googleId)
-    // console.log(userId)
-    useEffect(() => {
-        if (isLogin) {
-            const auth2 = gapi.auth2.getAuthInstance();
-            const googleId = auth2.currentUser.get().googleId
-            serUserId(googleId)
-        }
-    }, [])
+interface User {
+    googleId: string;
+    favorite: Beer[];
+    owner: Beer[];
+    firstName: string;
+    lastName: string;
+    email: string;
+    imageUrl: string;
+}
 
+export default function CardBeer({ _id, name, description, imageUrl, isLogin, userInfo, fetchUserInfo }: BeerProps) {
 
     const MAX_LENGTH_DESCRIPTION = 30
 
@@ -42,20 +56,59 @@ export default function CardBeer({ _id, name, description, imageUrl, isLogin }: 
     }
 
     const addToFavoriteBeer = (beerId: string) => {
-        try {
+        if (userInfo && fetchUserInfo) {
+            const auth2 = gapi.auth2.getAuthInstance();
+            const userId = auth2.currentUser.get().googleId
             axios.post('http://localhost:8080/favorite/add', {
                 beerId: beerId,
                 userId: userId
             })
                 .then(function (response) {
-                    console.log(response);
+                    fetchUserInfo()
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
-        } catch (error) {
-            console.log(error)
+
         }
+    }
+
+    const removeToFavoriteBeer = (beerId: string) => {
+        if (userInfo && fetchUserInfo) {
+            const auth2 = gapi.auth2.getAuthInstance();
+            const userId = auth2.currentUser.get().googleId
+            axios.delete('http://localhost:8080/favorite/remove', {
+                data: {
+                    beerId: beerId,
+                    userId: userId
+                }
+            })
+                .then(function (response) {
+                    fetchUserInfo();
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+        }
+    }
+
+    const renderIconFavorite = () => {
+
+        if (!userInfo || (userInfo.favorite.every(beer => beer._id != _id))) {
+            return (
+                <IconButton aria-label="add to favorites" onClick={() => addToFavoriteBeer(_id)}>
+                    <FavoriteIcon />
+                </IconButton>
+            )
+        }
+
+        return (
+            <IconButton aria-label="remove to favorites" style={{ color: "	rgb(240,128,128)" }} onClick={() => removeToFavoriteBeer(_id)}>
+                <FavoriteIcon />
+            </IconButton>
+        )
+
     }
 
     return (
@@ -63,7 +116,7 @@ export default function CardBeer({ _id, name, description, imageUrl, isLogin }: 
             <CardMedia
                 component="img"
                 height="140"
-                image={imageUrl ? imageUrl : "https://media.istockphoto.com/id/1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w="}
+                image={imageUrl ? imageUrl : "https://semantic-ui.com/images/wireframe/image.png"}
                 alt="green iguana"
             />
             <CardContent>
@@ -76,16 +129,16 @@ export default function CardBeer({ _id, name, description, imageUrl, isLogin }: 
             </CardContent>
             <CardActions >
                 {(isLogin) && (
-                    <IconButton aria-label="add to favorites" onClick={() => addToFavoriteBeer(_id)}>
-                        <FavoriteIcon />
-                    </IconButton>
+                    renderIconFavorite()
                 )}
                 {_id !== "0" ? (
                     <Link style={{ textDecoration: 'none' }} to={`/beer/${_id}`}>
                         <Button size="small">อ่านเพิ่มเติม</Button>
-                    )
+                    </Link>
+                ) : (
+                    <Button size="small">อ่านเพิ่มเติม</Button>
+                )
                 }
-
 
             </CardActions >
         </Card >

@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import { AccountCircle, Google } from '@mui/icons-material';
+import RecentActorsIcon from '@mui/icons-material/RecentActors';
 import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -19,6 +20,7 @@ import { GoogleLogin } from 'react-google-login';
 import { GoogleLogout } from 'react-google-login';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { Avatar } from '@mui/material';
 
 interface NavBarProps {
     login: (a: User) => void;
@@ -65,23 +67,18 @@ export default function NavBar({ login, logout, userInfo }: NavBarProps) {
 
     const handleGoogleLoginSuccess = async (response: any) => {
 
-        try {
-            const newUser = {
-                googleId: response.googleId,
-                favorite: [],
-                owner: [],
-                firstName: response.profileObj.givenName,
-                lastName: response.profileObj.familyName,
-                email: response.profileObj.email,
-                imageUrl: response.profileObj.imageUrl,
-            }
-            await axios.post('http://localhost:8080/user/login', newUser)
-            const userInfo = await axios.get("http://localhost:8080/user/" + response.googleId)
-            console.log(userInfo)
-
-        } catch (error) {
-            console.log(error)
+        const newUser = {
+            googleId: response.googleId,
+            favorite: [],
+            owner: [],
+            firstName: response.profileObj.givenName,
+            lastName: response.profileObj.familyName,
+            email: response.profileObj.email,
+            imageUrl: response.profileObj.imageUrl,
         }
+        await axios.post('http://localhost:8080/user/login', newUser)
+        const userInfo = await axios.get("http://localhost:8080/user/" + response.googleId)
+        login(userInfo.data)
 
     }
 
@@ -112,7 +109,7 @@ export default function NavBar({ login, logout, userInfo }: NavBarProps) {
 
             <MenuItem onClick={() => handleNavigateMenu("/myBeers")}>
                 <ListItemIcon>
-                    <ContentCut fontSize="small" />
+                    <RecentActorsIcon fontSize="small" />
                 </ListItemIcon>
                 <ListItemText>My Beers</ListItemText>
             </MenuItem>
@@ -130,6 +127,11 @@ export default function NavBar({ login, logout, userInfo }: NavBarProps) {
                     clientId={clientID}
                     buttonText="Logout"
                     onLogoutSuccess={logout}
+                    render={(renderProps) => (
+                        <Button onClick={renderProps.onClick} variant="outlined" startIcon={<Google />} fullWidth >
+                            Sign Out
+                        </Button>
+                    )}
                 />
             </MenuItem>
         </Menu>
@@ -162,17 +164,23 @@ export default function NavBar({ login, logout, userInfo }: NavBarProps) {
                                     aria-haspopup="true"
                                     onClick={handleProfileMenuOpen}
                                     color="inherit"
+                                    style={{ margin: 5 }}
                                 >
-                                    <AccountCircle />
+                                    <Avatar alt="Remy Sharp" src={userInfo.imageUrl} />
                                 </IconButton>
                             ) : (
                                 <GoogleLogin
                                     clientId={clientID}
-                                    buttonText="Login"
+                                    buttonText="Sign In With Google"
                                     onSuccess={handleGoogleLoginSuccess}
                                     onFailure={handleGoogleLoginFailure}
                                     cookiePolicy={'single_host_origin'}
                                     isSignedIn={true}
+                                    render={(renderProps) => (
+                                        <Button onClick={renderProps.onClick} variant="outlined" startIcon={<Google />}>
+                                            Sign In With Google
+                                        </Button>
+                                    )}
                                 />
                             )}
                         </Box>
