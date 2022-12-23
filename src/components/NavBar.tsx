@@ -68,6 +68,7 @@ export default function NavBar({ login, logout, userInfo }: NavBarProps) {
     };
 
     const handleGoogleLoginSuccess = async (response: any) => {
+        console.log(response)
         setIsLoading(true);
         const newUser = {
             googleId: response.googleId,
